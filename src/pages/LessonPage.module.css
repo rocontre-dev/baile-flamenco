@@ -57,6 +57,45 @@
   color: #8F7358;
 }
 
+/* Practice Mode Toggle */
+.practiceModeToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.practiceModeToggle:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.practiceModeToggle.practiceModeActive {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(143, 29, 50, 0.3);
+}
+
+.practiceModeToggle.practiceModeActive:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+/* Practice Mode Section Adjustment */
+.sectionPractice {
+  margin-bottom: var(--spacing-xl);
+}
+
 .title {
   font-size: 2.25rem;
   margin-bottom: var(--spacing-sm);

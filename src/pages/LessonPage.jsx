@@ -23,6 +23,7 @@ const LessonPage = () => {
   const [currentBeat, setCurrentBeat] = useState(0);
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [practiceMode, setPracticeMode] = useState(false);
 
   useEffect(() => {
     const loadExercise = async () => {
@@ -81,6 +82,14 @@ const LessonPage = () => {
     return `/palos/${paloSlug}/${categoriaSlug}`;
   };
 
+  // Marcadores temporales para práctica (fácil de mover al JSON después)
+  const practiceMarkers = [
+    { id: 'inicio', label: 'Inicio', time: 0 },
+    { id: 'marcaje', label: 'Marcaje', time: 2.5 },
+    { id: 'cierre', label: 'Cierre', time: 8.8 },
+    { id: 'final', label: 'Final', time: 11.5 }
+  ];
+
   return (
     <div className={styles.container}>
       {/* ===== 1. ENCABEZADO DE LECCIÓN ===== */}
@@ -97,6 +106,14 @@ const LessonPage = () => {
                 ⏱ {exercise.duracion} min
               </span>
             )}
+            <button
+              className={`${styles.practiceModeToggle} ${practiceMode ? styles.practiceModeActive : ''}`}
+              onClick={() => setPracticeMode(!practiceMode)}
+              aria-label={practiceMode ? 'Desactivar modo práctica' : 'Activar modo práctica'}
+              aria-pressed={practiceMode}
+            >
+              {practiceMode ? '● Modo práctica' : '○ Modo práctica'}
+            </button>
           </div>
           
           <h1 className={styles.title}>{exercise.titulo}</h1>
@@ -113,7 +130,7 @@ const LessonPage = () => {
       </header>
 
       {/* ===== 2. ESCUCHA EL COMPÁS ===== */}
-      <section className={styles.section}>
+      <section className={`${styles.section} ${practiceMode ? styles.sectionPractice : ''}`}>
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <Headphones size={24} className={styles.sectionIcon} />
@@ -164,9 +181,20 @@ const LessonPage = () => {
             poster={`/images/${exercise.recursos?.video?.poster || ''}`}
             title={exercise.titulo}
             className={styles.videoPlayer}
+            markers={practiceMarkers}
             onTimeUpdate={(currentTime, duration) => {
-              // Futura sincronización con BeatCounter
-              // console.log('Video time:', currentTime, 'Duration:', duration);
+              // Sincronización proporcional del BeatCounter
+              const beats = exercise.contenido?.conteo && exercise.contenido.conteo.length > 0 
+                ? exercise.contenido.conteo 
+                : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+              
+              if (duration > 0) {
+                const beatIndex = Math.floor((currentTime / duration) * beats.length);
+                const beat = Math.min(Math.max(beatIndex + 1, 1), beats.length);
+                setCurrentBeat(beat);
+              } else {
+                setCurrentBeat(1);
+              }
             }}
             onPlay={() => {
               // console.log('Video started');
@@ -214,42 +242,44 @@ const LessonPage = () => {
       </section>
 
       {/* ===== 4. CÓMO SE REALIZA ===== */}
-      <section className={styles.section}>
-        <div className={styles.sectionCard}>
-          <div className={styles.sectionHeader}>
-            <ListOrdered size={24} className={styles.sectionIcon} />
-            <h2 className={styles.sectionTitle}>Cómo se realiza</h2>
-          </div>
-          
-          <p className={styles.description}>{exercise.descripcion || 'Descripción no disponible.'}</p>
-          
-          {exercise.contenido?.pasos && exercise.contenido.pasos.length > 0 ? (
-          <div className={styles.steps}>
-            {exercise.contenido.pasos.map((paso, index) => (
-              <div key={index} className={styles.step}>
-                <span className={styles.stepNumber}>{index + 1}</span>
-                <div className={styles.stepContent}>
-                  {paso.tiempos && (
-                    <h4 className={styles.stepTimes}>{paso.tiempos}</h4>
-                  )}
-                  <p className={styles.stepDescription}>{paso.descripcion}</p>
-                  {paso.detalles && (
-                    <ul className={styles.stepDetails}>
-                      {paso.detalles.map((detalle, i) => (
-                        <li key={i}>{detalle}</li>
-                      ))}
-                    </ul>
-                  )}
+      {!practiceMode && (
+        <section className={styles.section}>
+          <div className={styles.sectionCard}>
+            <div className={styles.sectionHeader}>
+              <ListOrdered size={24} className={styles.sectionIcon} />
+              <h2 className={styles.sectionTitle}>Cómo se realiza</h2>
+            </div>
+            
+            <p className={styles.description}>{exercise.descripcion || 'Descripción no disponible.'}</p>
+            
+            {exercise.contenido?.pasos && exercise.contenido.pasos.length > 0 ? (
+            <div className={styles.steps}>
+              {exercise.contenido.pasos.map((paso, index) => (
+                <div key={index} className={styles.step}>
+                  <span className={styles.stepNumber}>{index + 1}</span>
+                  <div className={styles.stepContent}>
+                    {paso.tiempos && (
+                      <h4 className={styles.stepTimes}>{paso.tiempos}</h4>
+                    )}
+                    <p className={styles.stepDescription}>{paso.descripcion}</p>
+                    {paso.detalles && (
+                      <ul className={styles.stepDetails}>
+                        {paso.detalles.map((detalle, i) => (
+                          <li key={i}>{detalle}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            ) : null}
           </div>
-          ) : null}
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ===== 5. CONSEJOS DEL PROFESOR ===== */}
-      {exercise.contenido?.consejos && Array.isArray(exercise.contenido.consejos) && exercise.contenido.consejos.length > 0 && (
+      {!practiceMode && exercise.contenido?.consejos && Array.isArray(exercise.contenido.consejos) && exercise.contenido.consejos.length > 0 && (
         <section className={styles.section}>
           <div className={`${styles.sectionCard} ${styles.tipsCard}`}>
             <div className={styles.sectionHeader}>
@@ -270,58 +300,62 @@ const LessonPage = () => {
       )}
 
       {/* ===== 6. ERRORES COMUNES ===== */}
-      <section className={styles.section}>
-        <div className={`${styles.sectionCard} ${styles.mistakesCard}`}>
-          <div className={styles.sectionHeader}>
-            <AlertTriangle size={24} className={`${styles.sectionIcon} ${styles.mistakesIcon}`} />
-            <h2 className={styles.sectionTitle}>Errores comunes</h2>
+      {!practiceMode && (
+        <section className={styles.section}>
+          <div className={`${styles.sectionCard} ${styles.mistakesCard}`}>
+            <div className={styles.sectionHeader}>
+              <AlertTriangle size={24} className={`${styles.sectionIcon} ${styles.mistakesIcon}`} />
+              <h2 className={styles.sectionTitle}>Errores comunes</h2>
+            </div>
+            
+            <ul className={styles.mistakesList}>
+              <li>Perder el compás en el último tiempo.</li>
+              <li>Bajar la mirada durante el giro.</li>
+              <li>Tensar demasiado el braceo.</li>
+            </ul>
+            
+            <p className={styles.mistakesNote}>
+              Presta atención a estos puntos para evitar vicios en tu técnica.
+            </p>
           </div>
-          
-          <ul className={styles.mistakesList}>
-            <li>Perder el compás en el último tiempo.</li>
-            <li>Bajar la mirada durante el giro.</li>
-            <li>Tensar demasiado el braceo.</li>
-          </ul>
-          
-          <p className={styles.mistakesNote}>
-            Presta atención a estos puntos para evitar vicios en tu técnica.
-          </p>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ===== 7. REPITE EL EJERCICIO ===== */}
-      <section className={styles.section}>
-        <div className={`${styles.sectionCard} ${styles.practiceCard}`}>
-          <div className={styles.practiceContent}>
-            <RefreshCw size={32} className={styles.practiceIcon} />
-            
-            <h2 className={styles.practiceTitle}>¡A practicar!</h2>
-            
-            <p className={styles.practiceDescription}>
-              Repite este ejercicio varias veces hasta sentir el compás de forma natural.
-              La constancia es la clave del flamenco.
-            </p>
-            
-            <div className={styles.practiceActions}>
-              <Button 
-                variant="secondary"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              >
-                <Play size={16} />
-                Volver a reproducir
-              </Button>
+      {!practiceMode && (
+        <section className={styles.section}>
+          <div className={`${styles.sectionCard} ${styles.practiceCard}`}>
+            <div className={styles.practiceContent}>
+              <RefreshCw size={32} className={styles.practiceIcon} />
               
-              <Button 
-                variant="primary"
-                onClick={() => navigate(getNextExercise())}
-              >
-                Siguiente lección
-                <ChevronRight size={16} />
-              </Button>
+              <h2 className={styles.practiceTitle}>¡A practicar!</h2>
+              
+              <p className={styles.practiceDescription}>
+                Repite este ejercicio varias veces hasta sentir el compás de forma natural.
+                La constancia es la clave del flamenco.
+              </p>
+              
+              <div className={styles.practiceActions}>
+                <Button 
+                  variant="secondary"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  <Play size={16} />
+                  Volver a reproducir
+                </Button>
+                
+                <Button 
+                  variant="primary"
+                  onClick={() => navigate(getNextExercise())}
+                >
+                  Siguiente lección
+                  <ChevronRight size={16} />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 };

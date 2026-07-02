@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { Play, Pause, RotateCcw, Maximize, Minimize, Repeat2 } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Play, Pause, RotateCcw, Maximize, Minimize, Repeat2, Flag, X } from 'lucide-react';
 import styles from './PracticePlayer.module.css';
 
 /**
@@ -26,6 +26,7 @@ const PracticePlayer = ({
   onPlay,
   onPause,
   onEnded,
+  markers = [],
   className = ''
 }) => {
   // Referencias
@@ -45,6 +46,9 @@ const PracticePlayer = ({
   const [hasError, setHasError] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isLooping, setIsLooping] = useState(false);
+  const [abLoopEnabled, setAbLoopEnabled] = useState(false);
+  const [pointA, setPointA] = useState(null);
+  const [pointB, setPointB] = useState(null);
 
   // Velocidades disponibles
   const playbackRates = [0.5, 0.75, 1, 1.25, 1.5];
@@ -61,6 +65,97 @@ const PracticePlayer = ({
   const toggleLoop = useCallback(() => {
     setIsLooping((prev) => !prev);
   }, []);
+
+  // Marcar punto A
+  const markPointA = useCallback(() => {
+    if (!videoRef.current) return;
+    const currentTime = videoRef.current.currentTime;
+    setPointA(currentTime);
+    // Si ya existe B y A >= B, eliminar B
+    if (pointB !== null && currentTime >= pointB) {
+      setPointB(null);
+      setAbLoopEnabled(false);
+    }
+  }, [pointB]);
+
+  // Marcar punto B
+  const markPointB = useCallback(() => {
+    if (!videoRef.current) return;
+    const currentTime = videoRef.current.currentTime;
+    // Validar que B > A
+    if (pointA !== null && currentTime > pointA) {
+      setPointB(currentTime);
+    } else {
+      // No se puede establecer B antes o igual que A
+      setPointB(null);
+      setAbLoopEnabled(false);
+    }
+  }, [pointA]);
+
+  // Toggle A-B Loop
+  const toggleABLoop = useCallback(() => {
+    if (pointA !== null && pointB !== null && pointB > pointA) {
+      setAbLoopEnabled((prev) => !prev);
+    }
+  }, [pointA, pointB]);
+
+  // Limpiar A-B Loop
+  const clearABLoop = useCallback(() => {
+    setPointA(null);
+    setPointB(null);
+    setAbLoopEnabled(false);
+  }, []);
+
+  // Manejar click en marcador
+  const handleMarkerClick = useCallback((time) => {
+    if (!videoRef.current) return;
+    
+    const wasPlaying = isPlaying;
+    
+    // Cambiar al tiempo del marcador
+    videoRef.current.currentTime = time;
+    setCurrentTime(time);
+    
+    // Si estaba reproduciendo, asegurar que continúe
+    if (wasPlaying) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [isPlaying]);
+
+  // Calcular marcador activo (tolerancia ±0.35 segundos)
+  const activeMarker = useMemo(() => {
+    if (!markers || markers.length === 0) return null;
+    
+    const tolerance = 0.35;
+    let closest = null;
+    let closestDistance = Infinity;
+    
+    for (const marker of markers) {
+      const distance = Math.abs(currentTime - marker.time);
+      if (distance <= tolerance && distance < closestDistance) {
+        closest = marker;
+        closestDistance = distance;
+      }
+    }
+    
+    return closest;
+  }, [currentTime, markers]);
+
+  // Formatear tiempo con decimales (para A-B Loop)
+  const formatTimeWithDecimals = useCallback((time) => {
+    if (time === null || time === undefined || isNaN(time)) return '--:--.00';
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds.toFixed(2).padStart(5, '0')}`;
+  }, []);
+
+  // Calcular duración del segmento A-B
+  const abLoopDuration = useCallback(() => {
+    if (pointA !== null && pointB !== null) {
+      return pointB - pointA;
+    }
+    return null;
+  }, [pointA, pointB]);
 
   // Formatear tiempo a MM:SS
   const formatTime = useCallback((time) => {
@@ -157,9 +252,18 @@ const PracticePlayer = ({
   const updateTime = useCallback(() => {
     if (isPlaying && videoRef.current) {
       handleTimeUpdate();
+
+      // Verificar si estamos en A-B Loop y pasamos el punto B
+      if (abLoopEnabled && pointA !== null && pointB !== null) {
+        const current = videoRef.current.currentTime;
+        if (current >= pointB) {
+          videoRef.current.currentTime = pointA;
+          // No pausamos, continuamos reproduciendo desde A
+        }
+      }
     }
     animationFrameRef.current = requestAnimationFrame(updateTime);
-  }, [isPlaying, handleTimeUpdate]);
+  }, [isPlaying, handleTimeUpdate, abLoopEnabled, pointA, pointB]);
 
   // Efectos
   useEffect(() => {
@@ -173,6 +277,13 @@ const PracticePlayer = ({
     };
 
     const handleEnded = () => {
+      // A-B Loop tiene prioridad absoluta
+      if (abLoopEnabled && pointA !== null && pointB !== null) {
+        videoRef.current.currentTime = pointA;
+        videoRef.current.play().catch(() => {});
+        return;
+      }
+
       if (isLooping) {
         videoRef.current.currentTime = 0;
         videoRef.current.play().catch(() => {});
@@ -199,7 +310,7 @@ const PracticePlayer = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [onEnded]);
+  }, [onEnded, abLoopEnabled, pointA, pointB]);
 
   // Loop de actualización
   useEffect(() => {
@@ -405,6 +516,90 @@ const PracticePlayer = ({
               {isLooping ? 'Loop activado' : 'Loop desactivado'}
             </button>
           </div>
+
+          {/* Segmento de práctica (A-B Loop) */}
+          <div className={styles.abLoopSection}>
+            <span className={styles.abLoopLabel}>Segmento de práctica</span>
+            <div className={styles.abLoopButtons}>
+              <button
+                className={`${styles.abLoopButton} ${pointA !== null ? styles.abLoopButtonSet : ''}`}
+                onClick={markPointA}
+                aria-label="Marcar punto A"
+                disabled={!videoLoaded}
+              >
+                <Flag size={16} />
+                Marcar A
+              </button>
+              <button
+                className={`${styles.abLoopButton} ${pointB !== null ? styles.abLoopButtonSet : ''}`}
+                onClick={markPointB}
+                aria-label="Marcar punto B"
+                disabled={!videoLoaded || pointA === null}
+              >
+                <Flag size={16} />
+                Marcar B
+              </button>
+              <button
+                className={`${styles.abLoopButton} ${abLoopEnabled ? styles.abLoopButtonActive : ''}`}
+                onClick={toggleABLoop}
+                aria-label={abLoopEnabled ? 'Desactivar segmento A-B' : 'Activar segmento A-B'}
+                aria-pressed={abLoopEnabled}
+                disabled={!videoLoaded || pointA === null || pointB === null || pointB <= pointA}
+              >
+                <Repeat2 size={16} />
+                {abLoopEnabled ? 'A-B Activado' : 'Activar A-B'}
+              </button>
+              <button
+                className={styles.abLoopButton}
+                onClick={clearABLoop}
+                aria-label="Limpiar segmento A-B"
+                disabled={!videoLoaded || (pointA === null && pointB === null)}
+              >
+                <X size={16} />
+                Limpiar
+              </button>
+            </div>
+            {/* Display de puntos A, B y duración */}
+            {(pointA !== null || pointB !== null) && (
+              <div className={styles.abLoopPoints}>
+                <span className={styles.abLoopPoint}>
+                  A: {formatTimeWithDecimals(pointA)}
+                </span>
+                {pointB !== null && (
+                  <>
+                    <span className={styles.abLoopPoint}>
+                      B: {formatTimeWithDecimals(pointB)}
+                    </span>
+                    {abLoopDuration() !== null && (
+                      <span className={`${styles.abLoopPoint} ${styles.abLoopDuration}`}>
+                        Duración: {formatTimeWithDecimals(abLoopDuration())}
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Marcadores */}
+          {markers && markers.length > 0 && (
+            <div className={styles.markersSection}>
+              <span className={styles.markersLabel}>Marcadores</span>
+              <div className={styles.markersList}>
+                {markers.map((marker) => (
+                  <button
+                    key={marker.id}
+                    className={`${styles.markerButton} ${activeMarker?.id === marker.id ? styles.markerActive : ''}`}
+                    onClick={() => handleMarkerClick(marker.time)}
+                    aria-label={`Ir a ${marker.label} en ${formatTime(marker.time)}`}
+                  >
+                    {marker.label}
+                    <span className={styles.markerTime}>{formatTime(marker.time)}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
