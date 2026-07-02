@@ -1,6 +1,6 @@
 /* ===== Container ===== */
 .container {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-xl);
   max-width: var(--content-max-width);
   margin: 0 auto;
 }
@@ -23,78 +23,80 @@
 
 /* ===== 1. Lesson Header ===== */
 .lessonHeader {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .headerContent {
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
 .headerBadges {
   display: flex;
   gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  font-size: 0.75rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
 .badgeLevel {
-  background-color: rgba(143, 29, 50, 0.15);
+  background-color: rgba(143, 29, 50, 0.12);
   color: var(--color-primary);
 }
 
 .badgeDuration {
-  background-color: rgba(214, 180, 140, 0.2);
+  background-color: rgba(214, 180, 140, 0.18);
   color: #8F7358;
 }
 
 .title {
-  font-size: 2rem;
-  margin-bottom: var(--spacing-xs);
+  font-size: 2.25rem;
+  margin-bottom: var(--spacing-sm);
   color: var(--color-text);
   line-height: 1.2;
+  font-weight: 700;
 }
 
 .subtitle {
   color: #5C5148;
-  font-size: 1.125rem;
-  margin-bottom: var(--spacing-sm);
+  font-size: 1.1875rem;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
 }
 
 .profesor {
   color: #6F625B;
-  font-size: 0.9375rem;
-  margin-top: var(--spacing-sm);
+  font-size: 1rem;
+  margin-top: var(--spacing-md);
 }
 
 /* ===== Sections ===== */
 .section {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .sectionCard {
   background-color: white;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-2xl);
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -104,34 +106,57 @@
 }
 
 .sectionTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.375rem;
+  font-weight: 700;
   color: var(--color-text);
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .sectionDescription {
   color: #5C5148;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  margin-bottom: var(--spacing-lg);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: var(--spacing-xl);
 }
 
 /* ===== 2. Audio Section ===== */
 .audioControls {
   display: flex;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
 .audioButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl);
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-2xl);
   background-color: var(--color-primary);
   color: white;
   border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 4px rgba(143, 29, 50, 0.2);
+}
+
+.audioButton:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(143, 29, 50, 0.3);
+}
+
+.audioButtonSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background-color: var(--color-cream);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
   font-size: 1rem;
   font-weight: 500;
@@ -139,47 +164,31 @@
   transition: all var(--transition-fast);
 }
 
-.audioButton:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-1px);
-}
-
-.audioButtonSecondary {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--color-cream);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-  font-size: 0.9375rem;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
 .audioButtonSecondary:hover {
   background-color: #EDE6DC;
   border-color: var(--color-gold);
+  transform: translateY(-1px);
 }
 
 .audioInfo {
   display: flex;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-md);
+  gap: var(--spacing-xl);
+  padding: var(--spacing-lg);
   background-color: var(--color-cream);
   border-radius: var(--border-radius-md);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: #6F625B;
+  font-weight: 500;
 }
 
 /* ===== 3. Video Section ===== */
 .videoContainer {
   aspect-ratio: 16/9;
   background-color: #1a1a1a;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .videoPlaceholder {
@@ -188,7 +197,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   color: var(--color-gold);
 }
 
@@ -196,69 +205,77 @@
   margin: 0;
   text-align: center;
   color: var(--color-cream);
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1.125rem;
 }
 
 .videoNote {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: #888;
   font-style: italic;
 }
 
 .subsectionTitle {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: 700;
   color: var(--color-text);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: -0.01em;
 }
 
 /* BeatCounter */
 .beatCounterWrapper {
-  margin-bottom: var(--spacing-xl);
-  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+  padding: var(--spacing-xl);
   background-color: var(--color-cream);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--border-radius-lg);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 /* Thumbnails */
 .thumbnailSection {
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
 }
 
 .thumbnailStrip {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   overflow-x: auto;
   padding-bottom: var(--spacing-sm);
 }
 
 .thumbnail {
   flex-shrink: 0;
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   border-radius: var(--border-radius-md);
   border: 2px solid var(--color-border);
-  background-color: var(--color-cream);
+  background-color: white;
   cursor: pointer;
   transition: all var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .thumbnail:hover {
   border-color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .thumbnail.active {
   border-color: var(--color-primary);
-  background-color: rgba(143, 29, 50, 0.1);
+  background-color: rgba(143, 29, 50, 0.08);
+  box-shadow: 0 4px 12px rgba(143, 29, 50, 0.15);
 }
 
 .thumbnailPlaceholder {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   color: var(--color-text-muted);
+  font-weight: 700;
 }
 
 /* ===== 4. Instructions Section ===== */
@@ -266,7 +283,7 @@
   color: #2D2A28;
   line-height: 1.7;
   margin-bottom: var(--spacing-xl);
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .steps {
@@ -277,15 +294,18 @@
 
 .step {
   display: flex;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
   background-color: var(--color-cream);
   border-radius: var(--border-radius-md);
   transition: all var(--transition-fast);
+  border: 1px solid transparent;
 }
 
 .step:hover {
   background-color: #EDE6DC;
+  border-color: var(--color-border);
+  transform: translateX(4px);
 }
 
 .stepNumber {
@@ -293,13 +313,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   background-color: var(--color-primary);
   color: white;
   border-radius: 50%;
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(143, 29, 50, 0.2);
 }
 
 .stepContent {
@@ -307,16 +328,16 @@
 }
 
 .stepTimes {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--color-primary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--spacing-xs);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--spacing-sm);
 }
 
 .stepDescription {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: #2D2A28;
   margin-bottom: var(--spacing-sm);
   line-height: 1.6;
@@ -326,14 +347,15 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: #5C5148;
 }
 
 .stepDetails li {
   padding-left: var(--spacing-md);
   position: relative;
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.5;
 }
 
 .stepDetails li::before {
@@ -341,6 +363,7 @@
   position: absolute;
   left: 0;
   color: var(--color-gold);
+  font-weight: 600;
 }
 
 /* ===== 5. Tips Section ===== */
@@ -360,20 +383,21 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
 }
 
 .tipsList li {
   display: flex;
-  gap: var(--spacing-sm);
-  font-size: 0.9375rem;
+  gap: var(--spacing-md);
+  font-size: 1rem;
   color: #2D2A28;
   line-height: 1.6;
 }
 
 .tipBullet {
   color: var(--color-gold);
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.125rem;
 }
 
 /* ===== 6. Mistakes Section ===== */
@@ -389,16 +413,16 @@
 .mistakesList {
   list-style: none;
   padding: 0;
-  margin: 0 0 var(--spacing-md) 0;
+  margin: 0 0 var(--spacing-lg) 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
 }
 
 .mistakesList li {
   display: flex;
-  gap: var(--spacing-sm);
-  font-size: 0.9375rem;
+  gap: var(--spacing-md);
+  font-size: 1rem;
   color: #2D2A28;
   line-height: 1.6;
 }
@@ -406,13 +430,15 @@
 .mistakesList li::before {
   content: '⚠';
   flex-shrink: 0;
+  font-size: 1.125rem;
 }
 
 .mistakesNote {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: #6F625B;
   font-style: italic;
   margin: 0;
+  line-height: 1.5;
 }
 
 /* ===== 7. Practice CTA Section ===== */
@@ -420,44 +446,51 @@
   background: linear-gradient(135deg, var(--color-primary) 0%, #6F1426 100%);
   border: none;
   text-align: center;
+  padding: var(--spacing-2xl);
 }
 
 .practiceContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 }
 
 .practiceIcon {
   color: var(--color-cream);
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .practiceTitle {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   color: white;
   margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .practiceDescription {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1rem;
-  line-height: 1.6;
-  max-width: 400px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 450px;
   margin: 0;
 }
 
 .practiceActions {
   display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
 }
 
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
   .container {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .sectionCard {
+    padding: var(--spacing-xl);
   }
 }
 
@@ -466,40 +499,135 @@
     padding: var(--spacing-md);
   }
 
-  .title {
-    font-size: 1.5rem;
+  .lessonHeader {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section {
+    margin-bottom: var(--spacing-xl);
   }
 
   .sectionCard {
     padding: var(--spacing-lg);
   }
 
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 1.0625rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
   .audioControls {
     flex-direction: column;
+    gap: var(--spacing-md);
   }
 
   .audioButton,
   .audioButtonSecondary {
     justify-content: center;
+    width: 100%;
   }
 
   .audioInfo {
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+
+  .videoContainer {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .beatCounterWrapper {
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
   }
 
   .step {
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+
+  .stepNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9375rem;
+  }
+
+  .thumbnail {
+    width: 64px;
+    height: 64px;
+  }
+
+  .thumbnailPlaceholder {
+    font-size: 1.125rem;
+  }
+
+  .practiceCard {
+    padding: var(--spacing-xl);
+  }
+
+  .practiceTitle {
+    font-size: 1.5rem;
+  }
+
+  .practiceDescription {
+    font-size: 1rem;
   }
 
   .practiceActions {
     flex-direction: column;
     width: 100%;
+    gap: var(--spacing-md);
   }
 
   .practiceActions button {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+
+  .sectionCard {
+    padding: var(--spacing-md);
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .headerBadges {
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .audioButton,
+  .audioButtonSecondary {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 0.9375rem;
+  }
+
+  .beatCounterWrapper {
+    padding: var(--spacing-md);
+  }
+
+  .thumbnail {
+    width: 56px;
+    height: 56px;
   }
 }

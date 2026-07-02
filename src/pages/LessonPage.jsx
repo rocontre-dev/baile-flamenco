@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Play, Pause, RotateCcw, Headphones, Eye, ListOrdered, Lightbulb, AlertTriangle, RefreshCw, ChevronRight } from 'lucide-react';
 import GetExercise from '../useCases/exercises/GetExercise';
 import BeatCounter from '../components/media/BeatCounter';
+import PracticePlayer from '../components/media/PracticePlayer';
 import Breadcrumb from '../components/navigation/Breadcrumb';
 import Button from '../components/common/Button';
 import { useTranslation } from '../i18n/i18n';
@@ -157,14 +158,26 @@ const LessonPage = () => {
             <h2 className={styles.sectionTitle}>Observa el movimiento</h2>
           </div>
           
-          {/* Video */}
-          <div className={styles.videoContainer}>
-            <div className={styles.videoPlaceholder}>
-              <Play size={48} />
-              <p>Video: {exercise.recursos?.video?.principal || 'No disponible'}</p>
-              <p className={styles.videoNote}>Placeholder - El video se implementará con los assets reales</p>
-            </div>
-          </div>
+          {/* Video - PracticePlayer */}
+          <PracticePlayer
+            videoSrc={`/videos/${exercise.recursos?.video?.principal || ''}`}
+            poster={`/images/${exercise.recursos?.video?.poster || ''}`}
+            title={exercise.titulo}
+            className={styles.videoPlayer}
+            onTimeUpdate={(currentTime, duration) => {
+              // Futura sincronización con BeatCounter
+              // console.log('Video time:', currentTime, 'Duration:', duration);
+            }}
+            onPlay={() => {
+              // console.log('Video started');
+            }}
+            onPause={() => {
+              // console.log('Video paused');
+            }}
+            onEnded={() => {
+              // console.log('Video ended');
+            }}
+          />
           
           {/* BeatCounter integrado */}
           <div className={styles.beatCounterWrapper}>

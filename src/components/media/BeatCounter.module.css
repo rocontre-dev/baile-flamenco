@@ -1,10 +1,10 @@
 .container {
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
 }
 
 .beats {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -14,26 +14,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background-color: white;
   border: 2px solid var(--color-border);
   cursor: pointer;
   transition: all var(--transition-fast);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .beat:hover {
   border-color: var(--color-gold);
-  transform: scale(1.08);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .beat.active {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(143, 29, 50, 0.3);
+  box-shadow: 0 4px 16px rgba(143, 29, 50, 0.35);
+  transform: scale(1.12);
 }
 
 .beat.accent {
@@ -44,13 +45,14 @@
 .beat.accent::before {
   content: '';
   position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 10px;
-  height: 10px;
+  top: -6px;
+  right: -6px;
+  width: 12px;
+  height: 12px;
   background-color: var(--color-gold);
   border-radius: 50%;
   border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(214, 180, 140, 0.3);
 }
 
 .beat.active.accent::before {
@@ -60,7 +62,7 @@
 
 .beatNumber {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-weight: 700;
   color: #1C1C1C;
 }
@@ -75,12 +77,35 @@
 
 /* Mobile */
 @media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+
+  .beats {
+    gap: var(--spacing-md);
+  }
+
   .beat {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
   
   .beatNumber {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .beat {
+    width: 38px;
+    height: 38px;
+  }
+
+  .beatNumber {
     font-size: 1rem;
+  }
+
+  .beats {
+    gap: var(--spacing-sm);
   }
 }
