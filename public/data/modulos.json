@@ -1,0 +1,11 @@
+[
+  {
+    "id": "mod-001",
+    "cursoId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "titulo": "Módulo de Tangos",
+    "descripcion": "Aprende los fundamentos del tango flamenco: compás, marcajes, remates y llamadas.",
+    "orden": 1,
+    "palos": ["palo-001"],
+    "activo": true
+  }
+]

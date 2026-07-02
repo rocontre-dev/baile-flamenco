@@ -1,0 +1,96 @@
+/* Node Container */
+.node {
+  margin-bottom: 0;
+}
+
+/* Node Header */
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  color: #E8D5C4;
+  text-decoration: none;
+}
+
+.nodeHeader:hover {
+  background-color: rgba(214, 180, 140, 0.12);
+  color: var(--color-gold);
+}
+
+.nodeHeader.active {
+  background-color: rgba(143, 29, 50, 0.2);
+  color: #D4A574;
+}
+
+/* Node Header Left Section */
+.nodeHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+/* Chevron Icon */
+.chevron {
+  transition: transform 200ms ease-in-out;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.chevronExpanded {
+  transform: rotate(90deg);
+}
+
+/* Node Icon (Folder) */
+.nodeIcon {
+  flex-shrink: 0;
+  color: var(--color-gold);
+  opacity: 0.8;
+}
+
+/* Node Name */
+.nodeName {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Disabled State */
+.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  color: #8A7A6E;
+}
+
+.disabled:hover {
+  background-color: transparent;
+  color: #8A7A6E;
+}
+
+/* Coming Soon Badge */
+.comingSoon {
+  font-size: 0.6875rem;
+  color: #8A7A6E;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Children List */
+.childrenList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease-in-out;
+}
+
+.childrenExpanded {
+  max-height: 500px;
+}

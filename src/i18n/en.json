@@ -1,0 +1,96 @@
+{
+  "common": {
+    "back": "← Back",
+    "play": "Play",
+    "pause": "Pause",
+    "loading": "Loading...",
+    "error": "Error",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "next": "Next",
+    "previous": "Previous",
+    "showMore": "Show more",
+    "showLess": "Show less"
+  },
+  "navigation": {
+    "home": "Home",
+    "palos": "Palos",
+    "library": "Library",
+    "progress": "My Progress",
+    "about": "About the Studio",
+    "account": "My Account",
+    "login": "Log In",
+    "logout": "Log Out",
+    "register": "Register"
+  },
+  "sidebar": {
+    "title": "Flamenco Palos",
+    "compas": "Compás",
+    "marcajes": "Marcajes",
+    "tablasPies": "Footwork Tables",
+    "remates": "Remates",
+    "llamadas": "Llamadas",
+    "escobillas": "Escobillas",
+    "practicaPalmas": "Palmas Practice",
+    "moreComingSoon": "More palos coming soon",
+    "practiceMakesMaster": "Practice makes perfect."
+  },
+  "lesson": {
+    "explanation": "Explanation",
+    "aboutCompas": "About the Compás",
+    "howTo": "How to do it?",
+    "tip": "Tip",
+    "commonMistakes": "Common mistakes",
+    "materials": "Supplementary materials",
+    "watchFullVideo": "Watch full video",
+    "listenCompas": "Listen to compás",
+    "practice": "Practice",
+    "duration": "Duration",
+    "level": "Level",
+    "instructor": "Instructor"
+  },
+  "levels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "videoPlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "settings": "Settings",
+    "playbackRate": "Speed",
+    "volume": "Volume"
+  },
+  "errors": {
+    "notFound": "Not found",
+    "lessonNotFound": "Lesson not found",
+    "exerciseNotFound": "Exercise not found",
+    "tryAgain": "Try again",
+    "goHome": "Go home"
+  },
+  "home": {
+    "welcome": "Welcome to Tibiritábara",
+    "subtitle": "Flamenco dance learning platform",
+    "startLearning": "Start learning",
+    "featuredCourses": "Featured courses",
+    "continueLearning": "Continue learning"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot your password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  }
+}

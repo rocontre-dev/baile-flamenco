@@ -1,0 +1,14 @@
+[
+  {
+    "id": "palo-001",
+    "nombre": "Tangos",
+    "slug": "tangos",
+    "descripcion": "Palo flamenco de compás binario (4/4), de aire alegre y festivo. Es uno de los palos más accesibles para comenzar en el flamenco.",
+    "compas": 4,
+    "acentos": [1, 3, 5, 7, 9, 11],
+    "categorias": ["cat-001", "cat-002", "cat-003", "cat-004", "cat-005"],
+    "imagen": "palo-tangos.jpg",
+    "orden": 1,
+    "activo": true
+  }
+]

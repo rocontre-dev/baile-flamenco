@@ -1,0 +1,14 @@
+/* Navigation Tree Container */
+.tree {
+  width: 100%;
+}
+
+/* Tree List */
+.treeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

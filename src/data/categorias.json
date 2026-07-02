@@ -1,0 +1,47 @@
+[
+  {
+    "id": "cat-001",
+    "paloId": "palo-001",
+    "nombre": "Compás",
+    "slug": "compas",
+    "descripcion": "Aprende a sentir y marcar el compás de los tangos.",
+    "orden": 1,
+    "activo": true
+  },
+  {
+    "id": "cat-002",
+    "paloId": "palo-001",
+    "nombre": "Marcajes",
+    "slug": "marcajes",
+    "descripcion": "Movimientos básicos para marcar el ritmo.",
+    "orden": 2,
+    "activo": true
+  },
+  {
+    "id": "cat-003",
+    "paloId": "palo-001",
+    "nombre": "Tablas de pies",
+    "slug": "tablas-pies",
+    "descripcion": "Secuencias de taconeo y zapateado.",
+    "orden": 3,
+    "activo": true
+  },
+  {
+    "id": "cat-004",
+    "paloId": "palo-001",
+    "nombre": "Remates",
+    "slug": "remates",
+    "descripcion": "Cierres y finales de secuencias.",
+    "orden": 4,
+    "activo": true
+  },
+  {
+    "id": "cat-005",
+    "paloId": "palo-001",
+    "nombre": "Llamadas",
+    "slug": "llamadas",
+    "descripcion": "Señales para indicar cambios en el baile.",
+    "orden": 5,
+    "activo": true
+  }
+]

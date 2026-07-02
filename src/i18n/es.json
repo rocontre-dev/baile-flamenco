@@ -1,0 +1,96 @@
+{
+  "common": {
+    "back": "← Volver",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "showMore": "Ver más",
+    "showLess": "Ver menos"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "palos": "Palos",
+    "library": "Biblioteca",
+    "progress": "Mi progreso",
+    "about": "Acerca del estudio",
+    "account": "Mi cuenta",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "register": "Registrarse"
+  },
+  "sidebar": {
+    "title": "Palos Flamencos",
+    "compas": "Compás",
+    "marcajes": "Marcajes",
+    "tablasPies": "Tablas de pies",
+    "remates": "Remates",
+    "llamadas": "Llamadas",
+    "escobillas": "Escobillas",
+    "practicaPalmas": "Práctica con palmas",
+    "moreComingSoon": "Más palos próximamente",
+    "practiceMakesMaster": "La práctica hace la maestría."
+  },
+  "lesson": {
+    "explanation": "Explicación",
+    "aboutCompas": "Sobre el compás",
+    "howTo": "¿Cómo se hace?",
+    "tip": "Consejo",
+    "commonMistakes": "Errores comunes",
+    "materials": "Material complementario",
+    "watchFullVideo": "Ver video completo",
+    "listenCompas": "Escuchar compás",
+    "practice": "Practicar",
+    "duration": "Duración",
+    "level": "Nivel",
+    "instructor": "Instructor"
+  },
+  "levels": {
+    "beginner": "Principiante",
+    "intermediate": "Intermedio",
+    "advanced": "Avanzado"
+  },
+  "videoPlayer": {
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "mute": "Silenciar",
+    "unmute": "Activar sonido",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "settings": "Configuración",
+    "playbackRate": "Velocidad",
+    "volume": "Volumen"
+  },
+  "errors": {
+    "notFound": "No encontrado",
+    "lessonNotFound": "Lección no encontrada",
+    "exerciseNotFound": "Ejercicio no encontrado",
+    "tryAgain": "Intentar de nuevo",
+    "goHome": "Ir al inicio"
+  },
+  "home": {
+    "welcome": "Bienvenido a Tibiritábara",
+    "subtitle": "Plataforma de aprendizaje de baile flamenco",
+    "startLearning": "Comenzar a aprender",
+    "featuredCourses": "Cursos destacados",
+    "continueLearning": "Continuar aprendiendo"
+  },
+  "auth": {
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse"
+  }
+}

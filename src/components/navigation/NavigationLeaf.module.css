@@ -1,0 +1,52 @@
+/* Leaf Item */
+.leafItem {
+  margin-bottom: 0;
+}
+
+/* Leaf Link */
+.leafLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 8px 40px;
+  color: #C4B0A0;
+  text-decoration: none;
+  font-size: 0.875rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+  transition: all var(--transition-fast);
+}
+
+.leafLink:hover {
+  background-color: rgba(214, 180, 140, 0.08);
+  color: var(--color-gold);
+}
+
+/* Active State */
+.leafLink.active {
+  color: #D4A574;
+  border-left-color: var(--color-primary);
+  background-color: rgba(143, 29, 50, 0.1);
+  font-weight: 500;
+}
+
+.leafLink.active:hover {
+  background-color: rgba(143, 29, 50, 0.15);
+  color: #D4A574;
+}
+
+/* Leaf Icon */
+.leafIcon {
+  flex-shrink: 0;
+  opacity: 0.7;
+  color: inherit;
+}
+
+.leafLink.active .leafIcon {
+  opacity: 1;
+}
+
+/* Leaf Name */
+.leafName {
+  line-height: 1.4;
+}

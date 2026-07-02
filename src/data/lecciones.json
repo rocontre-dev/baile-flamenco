@@ -1,0 +1,12 @@
+[
+  {
+    "id": "lec-001",
+    "categoriaId": "cat-004",
+    "titulo": "Remate básico",
+    "slug": "remate-basico",
+    "descripcion": "Aprende el remate fundamental de 12 tiempos por tangos.",
+    "orden": 1,
+    "ejercicios": ["ej-001"],
+    "activo": true
+  }
+]

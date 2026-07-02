@@ -1,0 +1,93 @@
+[
+  {
+    "id": "ej-001",
+    "leccionId": "lec-001",
+    "titulo": "Remate básico por Tangos",
+    "subtitulo": "Fundamento esencial",
+    "slug": "remate-basico",
+    "descripcion": "Remate básico de doce tiempos que sirve como cierre elegante y contundente al final de una secuencia.",
+    "objetivo": "Aprender a cerrar secuencias con elegancia y precisión, marcando correctamente los acentos del compás.",
+    "nivel": "Principiante",
+    "duracion": "00:12",
+    "profesorId": "prof-001",
+    "orden": 1,
+    "activo": true,
+    
+    "recursos": {
+      "video": {
+        "principal": "tangos-remate-feet.mp4",
+        "poster": "tangos-remate-poster.jpg"
+      },
+      "audio": {
+        "compas": "compas-tangos.mp3"
+      },
+      "imagen": {
+        "gif": "gif-remate.gif",
+        "miniaturas": [
+          "tangos-remate-front-01.jpg",
+          "tangos-remate-front-02.jpg",
+          "tangos-remate-front-03.jpg",
+          "tangos-remate-front-04.jpg",
+          "tangos-remate-front-05.jpg",
+          "tangos-remate-front-06.jpg"
+        ]
+      }
+    },
+    
+    "contenido": {
+      "conteo": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "pasos": [
+        {
+          "tiempos": "1-3",
+          "descripcion": "Golpe de tacón derecho en 1. Planta izquierda en 2. Tacón izquierdo en 3.",
+          "detalles": [
+            "Tiempo 1: Golpe seco de tacón derecho en el suelo",
+            "Tiempo 2: Apoyo de planta del pie izquierdo",
+            "Tiempo 3: Golpe de tacón izquierdo"
+          ]
+        },
+        {
+          "tiempos": "4-6",
+          "descripcion": "Golpe de tacón derecho en 4. Planta izquierda en 5. Tacón izquierdo en 6.",
+          "detalles": [
+            "Tiempo 4: Golpe de tacón derecho",
+            "Tiempo 5: Apoyo de planta izquierda",
+            "Tiempo 6: Golpe de tacón izquierdo"
+          ]
+        },
+        {
+          "tiempos": "7-9",
+          "descripcion": "Doble golpe de tacón derecho en 7 y 8. Planta izquierda en 9.",
+          "detalles": [
+            "Tiempo 7: Primer golpe de tacón derecho",
+            "Tiempo 8: Segundo golpe de tacón derecho (más suave)",
+            "Tiempo 9: Apoyo de planta izquierda"
+          ]
+        },
+        {
+          "tiempos": "10-12",
+          "descripcion": "Giro hacia la izquierda terminando con golpe de tacón derecho en 12 y pose.",
+          "detalles": [
+            "Tiempo 10-11: Giro controlado hacia la izquierda",
+            "Tiempo 12: Golpe final de tacón derecho y pose de cierre"
+          ]
+        }
+      ],
+      "consejos": [
+        "Mantén el compás en todo momento",
+        "La postura debe ser erguida y elegante",
+        "Marca bien los acentos en los tacones",
+        "El giro debe ser controlado, no brusco"
+      ],
+      "erroresComunes": [
+        "Perder el compás en el giro final",
+        "No marcar suficientemente los acentos",
+        "Inclinar el cuerpo hacia adelante",
+        "Apresurar el doble golpe de tacón"
+      ],
+      "materialComplementario": []
+    },
+    
+    "tags": ["remate", "basico", "taconeo", "tangos", "12-tiempos"]
+  }
+]

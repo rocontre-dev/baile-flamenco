@@ -1,0 +1,15 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "slug": "iniciacion-flamenco",
+    "titulo": "Iniciación al Flamenco",
+    "descripcion": "Curso fundamental para comenzar en el baile flamenco. Aprende los palos básicos, la postura correcta y el compás esencial.",
+    "nivel": "Principiante",
+    "profesorId": "prof-001",
+    "imagen": "curso-iniciacion.jpg",
+    "duracion": "12 semanas",
+    "modulos": ["mod-001"],
+    "orden": 1,
+    "activo": true
+  }
+]

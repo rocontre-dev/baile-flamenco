@@ -1,0 +1,86 @@
+.container {
+  padding: var(--spacing-md);
+}
+
+.beats {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.beat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.beat:hover {
+  border-color: var(--color-gold);
+  transform: scale(1.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.beat.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(143, 29, 50, 0.3);
+}
+
+.beat.accent {
+  border-width: 3px;
+  border-color: var(--color-gold);
+}
+
+.beat.accent::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-gold);
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.beat.active.accent::before {
+  background-color: var(--color-cream);
+  border-color: var(--color-primary);
+}
+
+.beatNumber {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1C1C1C;
+}
+
+.beat.active .beatNumber {
+  color: white;
+}
+
+.accentMark {
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .beat {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .beatNumber {
+    font-size: 1rem;
+  }
+}

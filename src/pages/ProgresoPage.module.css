@@ -1,0 +1,27 @@
+.container {
+  padding: var(--spacing-lg);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: var(--color-card);
+  border-radius: var(--border-radius-lg);
+  color: var(--color-text-muted);
+  font-style: italic;
+}

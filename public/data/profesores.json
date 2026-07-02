@@ -1,0 +1,20 @@
+[
+  {
+    "id": "prof-001",
+    "nombre": "Rodrigo Robles",
+    "slug": "rodrigo-robles",
+    "biografia": "Bailaor profesional con más de 20 años de experiencia en los escenarios flamencos. Director artístico de Tibiritábara, ha dedicado su carrera a la enseñanza y preservación del arte flamenco. Especialista en tangos, alegrías y bulerías.",
+    "foto": "rodrigo-robles.jpg",
+    "especialidades": ["Tangos", "Alegrías", "Bulerías", "Soleá"],
+    "trayectoria": [
+      "Primer bailarín del Ballet Nacional de España",
+      "Premio Nacional de Flamenco 2015",
+      "Director de Tibiritábara desde 2010"
+    ],
+    "redesSociales": {
+      "instagram": "@rodrigorobles_flamenco",
+      "youtube": "RodrigoRoblesFlamenco"
+    },
+    "activo": true
+  }
+]
