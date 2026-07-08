@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import GetCourses from '../../useCases/courses/GetCourses';
-import { BookOpen, Clock, Users } from 'lucide-react';
+import { BookOpen, Clock, Users, ArrowRight } from 'lucide-react';
 import styles from './AcademyPages.module.css';
 
 /**
@@ -68,6 +69,9 @@ const CoursesPage = () => {
                 {course.lessons.length} lecciones
               </span>
             </div>
+            <Link to={`/academia/cursos/${course.id}`} className={styles.viewDetailLink}>
+              Ver detalle <ArrowRight size={14} />
+            </Link>
           </div>
         ))}
       </div>

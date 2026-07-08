@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { mockCurrentUser } from '../data/mockCurrentUser';
 
 /**
  * Authentication context
- * Placeholder for future authentication implementation
+ * Manages user authentication and role-based access control
  */
 const AuthContext = createContext();
 
@@ -14,93 +15,51 @@ export const useAuth = () => {
   return context;
 };
 
+// Role permissions definition
+const ROLE_PERMISSIONS = {
+  admin: ['dashboard', 'alumnos', 'profesores', 'cursos', 'mis-cursos', 'mis-alumnos', 'detalle-curso'],
+  teacher: ['dashboard', 'mis-cursos', 'mis-alumnos', 'detalle-curso'],
+  student: ['mis-cursos', 'detalle-curso']
+};
+
 export const AuthProvider = ({ children }) => {
-  // User state
-  const [user, setUser] = useState(null);
+  // User state - using mockCurrentUser for development
+  const [user, setUser] = useState(mockCurrentUser);
   
   // Loading state
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // No loading needed for mock
   
-  // Check for existing session on mount
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // TODO: Implement actual auth check
-        // For now, just simulate no user
-        setUser(null);
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Check if user can access a specific permission
+  const canAccess = (permissions = []) => {
+    if (!user) return false;
+    if (user.role === 'admin') return true; // Admin has all permissions
     
-    checkAuth();
-  }, []);
+    const userPermissions = ROLE_PERMISSIONS[user.role] || [];
+    return permissions.some(perm => userPermissions.includes(perm));
+  };
   
-  // Login function
+  // Login function (mock)
   const login = async (email, password) => {
-    // TODO: Implement actual login with Firebase/API
-    // Placeholder implementation
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock user (remove in production)
-      const mockUser = {
-        id: 'user-001',
-        email: email,
-        nombre: 'Usuario Demo',
-        role: 'student',
-        avatar: null
-      };
-      
-      setUser(mockUser);
-      return { success: true, user: mockUser };
-    } catch (error) {
-      return { success: false, error: error.message };
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // Register function
-  const register = async (userData) => {
-    // TODO: Implement actual registration with Firebase/API
-    // Placeholder implementation
-    setLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock user (remove in production)
-      const mockUser = {
-        id: 'user-001',
-        email: userData.email,
-        nombre: userData.nombre,
-        role: 'student',
-        avatar: null
-      };
-      
-      setUser(mockUser);
-      return { success: true, user: mockUser };
-    } catch (error) {
-      return { success: false, error: error.message };
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // Logout function
-  const logout = async () => {
-    // TODO: Implement actual logout
-    setLoading(true);
-    try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
-      setUser(null);
+      
+      // For demo purposes, return the mock user
+      setUser(mockCurrentUser);
+      return { success: true, user: mockCurrentUser };
+    } catch (error) {
+      return { success: false, error: error.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Logout function (mock)
+  const logout = async () => {
+    setLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setUser(mockCurrentUser); // Return to mock user
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -109,7 +68,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Check if user has role
+  // Check if user has specific role
   const hasRole = (role) => {
     if (!user) return false;
     return user.role === role;
@@ -120,6 +79,19 @@ export const AuthProvider = ({ children }) => {
     return user !== null;
   };
   
+  // Switch user role (for development/testing)
+  const switchRole = (newRole) => {
+    const mockUsers = {
+      admin: { id: 'admin-1', role: 'admin', name: 'Administrador' },
+      teacher: { id: 'teacher-1', role: 'teacher', name: 'Carmen Morales' },
+      student: { id: 'student-1', role: 'student', name: 'María López' }
+    };
+    
+    if (mockUsers[newRole]) {
+      setUser(mockUsers[newRole]);
+    }
+  };
+  
   const value = {
     // State
     user,
@@ -128,10 +100,11 @@ export const AuthProvider = ({ children }) => {
     
     // Actions
     login,
-    register,
     logout,
     hasRole,
-    checkAuth: () => setLoading(true) // Trigger re-check
+    canAccess,
+    switchRole,
+    checkAuth: () => setLoading(true)
   };
   
   return (

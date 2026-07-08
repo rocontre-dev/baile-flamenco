@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Menu, User, Search } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from '../../i18n/i18n';
 import styles from './Header.module.css';
 
@@ -11,6 +12,10 @@ import styles from './Header.module.css';
 const Header = () => {
   const { toggleMobileMenu, toggleSidebar } = useApp();
   const { t } = useTranslation();
+  const { user, hasRole } = useAuth();
+  
+  // Only show Academia link for admin and teacher roles
+  const showAcademiaLink = hasRole('admin') || hasRole('teacher');
 
   return (
     <header className={styles.header}>
@@ -46,9 +51,16 @@ const Header = () => {
           <Link to="/progreso" className={styles.navLink}>
             {t('navigation.progress')}
           </Link>
-          <Link to="/academia" className={styles.navLink}>
-            Academia
-          </Link>
+          {showAcademiaLink && (
+            <Link to="/academia" className={styles.navLink}>
+              Academia
+            </Link>
+          )}
+          {!showAcademiaLink && (
+            <Link to="/mis-cursos" className={styles.navLink}>
+              Mis Cursos
+            </Link>
+          )}
           <Link to="/acerca" className={styles.navLink}>
             {t('navigation.about')}
           </Link>

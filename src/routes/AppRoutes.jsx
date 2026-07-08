@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import AcademyLayout from '../components/layout/AcademyLayout';
+import RoleGuard from '../components/auth/RoleGuard';
 import HomePage from '../pages/HomePage';
 import PalosPage from '../pages/PalosPage';
 import PaloDetailPage from '../pages/PaloDetailPage';
@@ -15,6 +16,10 @@ import AcademyDashboard from '../pages/academy/AcademyDashboard';
 import StudentsPage from '../pages/academy/StudentsPage';
 import TeachersPage from '../pages/academy/TeachersPage';
 import CoursesPage from '../pages/academy/CoursesPage';
+import CourseDetailPage from '../pages/academy/CourseDetailPage';
+import MyCoursesPageStudent from '../pages/student/MyCoursesPage';
+import MyCoursesPageTeacher from '../pages/teacher/MyCoursesPage';
+import MyStudentsPage from '../pages/teacher/MyStudentsPage';
 
 /**
  * Main application routes
@@ -46,14 +51,42 @@ const AppRoutes = () => {
         <Route path="acerca" element={<AcercaPage />} />
         <Route path="cuenta" element={<CuentaPage />} />
         
-        {/* Academy section */}
-        <Route path="academia" element={<AcademyLayout />}>
+        {/* Academy section - Admin only */}
+        <Route path="academia" element={
+          <RoleGuard allowedRoles={['admin']}>
+            <AcademyLayout />
+          </RoleGuard>
+        }>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AcademyDashboard />} />
           <Route path="alumnos" element={<StudentsPage />} />
           <Route path="profesores" element={<TeachersPage />} />
           <Route path="cursos" element={<CoursesPage />} />
+          <Route path="cursos/:courseId" element={<CourseDetailPage />} />
         </Route>
+        
+        {/* Teacher routes */}
+        <Route path="academia/mis-cursos" element={
+          <RoleGuard allowedRoles={['admin', 'teacher']}>
+            <AcademyLayout />
+          </RoleGuard>
+        }>
+          <Route index element={<MyCoursesPageTeacher />} />
+        </Route>
+        <Route path="academia/mis-alumnos" element={
+          <RoleGuard allowedRoles={['admin', 'teacher']}>
+            <AcademyLayout />
+          </RoleGuard>
+        }>
+          <Route index element={<MyStudentsPage />} />
+        </Route>
+        
+        {/* Student routes */}
+        <Route path="mis-cursos" element={
+          <RoleGuard allowedRoles={['admin', 'teacher', 'student']}>
+            <MyCoursesPageStudent />
+          </RoleGuard>
+        } />
         
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
