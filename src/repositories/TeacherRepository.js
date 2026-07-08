@@ -1,80 +1,36 @@
-import { fetchData } from '../utils/helpers';
+import { mockTeachers } from '../data/mockTeachers';
 
 /**
- * Repository for teacher data access
- * Responsible only for fetching data, no business logic
+ * Teacher Repository
+ * Manages teacher data operations (mock only - no backend)
  */
 class TeacherRepository {
-  constructor() {
-    this.endpoint = 'profesores.json';
-    this.cache = null;
-  }
-
   /**
-   * Fetch all teachers
+   * Get all teachers
    * @returns {Promise<Array>} List of all teachers
    */
   async getAll() {
-    if (this.cache) return this.cache;
-    
-    try {
-      const data = await fetchData(this.endpoint);
-      this.cache = data;
-      return data;
-    } catch (error) {
-      console.error('TeacherRepository.getAll error:', error);
-      throw error;
-    }
+    return mockTeachers;
   }
 
   /**
    * Get a teacher by ID
    * @param {string} id - Teacher ID
-   * @returns {Promise<Object|null>} Teacher object or null if not found
+   * @returns {Promise<Object|null>} Teacher data or null if not found
    */
   async getById(id) {
-    const teachers = await this.getAll();
-    return teachers.find(teacher => teacher.id === id) || null;
+    const teacher = mockTeachers.find(t => t.id === id);
+    return teacher || null;
   }
 
   /**
-   * Get a teacher by slug
-   * @param {string} slug - Teacher slug
-   * @returns {Promise<Object|null>} Teacher object or null if not found
+   * Get teacher's courses
+   * @param {string} teacherId - Teacher ID
+   * @returns {Promise<Array>} List of course IDs
    */
-  async getBySlug(slug) {
-    const teachers = await this.getAll();
-    return teachers.find(teacher => teacher.slug === slug) || null;
-  }
-
-  /**
-   * Get teachers by specialty
-   * @param {string} specialty - Palo specialty
-   * @returns {Promise<Array>} List of teachers with the specialty
-   */
-  async getBySpecialty(specialty) {
-    const teachers = await this.getAll();
-    return teachers.filter(teacher => 
-      teacher.especialidades.some(esp => 
-        esp.toLowerCase() === specialty.toLowerCase()
-      )
-    );
-  }
-
-  /**
-   * Get active teachers only
-   * @returns {Promise<Array>} List of active teachers
-   */
-  async getActive() {
-    const teachers = await this.getAll();
-    return teachers.filter(teacher => teacher.activo !== false);
-  }
-
-  /**
-   * Clear the cache
-   */
-  clearCache() {
-    this.cache = null;
+  async getCourses(teacherId) {
+    const teacher = await this.getById(teacherId);
+    return teacher ? teacher.assignedCourseIds : [];
   }
 }
 

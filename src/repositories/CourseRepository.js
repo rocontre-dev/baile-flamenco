@@ -1,76 +1,64 @@
-import { fetchData } from '../utils/helpers';
+import { mockCourses } from '../data/mockCourses';
 
 /**
- * Repository for course data access
- * Responsible only for fetching data, no business logic
+ * Course Repository
+ * Manages course data operations (mock only - no backend)
  */
 class CourseRepository {
-  constructor() {
-    this.endpoint = 'cursos.json';
-    this.cache = null;
-  }
-
   /**
-   * Fetch all courses
+   * Get all courses
    * @returns {Promise<Array>} List of all courses
    */
   async getAll() {
-    if (this.cache) return this.cache;
-    
-    try {
-      const data = await fetchData(this.endpoint);
-      this.cache = data;
-      return data;
-    } catch (error) {
-      console.error('CourseRepository.getAll error:', error);
-      throw error;
-    }
+    return mockCourses;
   }
 
   /**
    * Get a course by ID
    * @param {string} id - Course ID
-   * @returns {Promise<Object|null>} Course object or null if not found
+   * @returns {Promise<Object|null>} Course data or null if not found
    */
   async getById(id) {
-    const courses = await this.getAll();
-    return courses.find(course => course.id === id) || null;
-  }
-
-  /**
-   * Get a course by slug
-   * @param {string} slug - Course slug
-   * @returns {Promise<Object|null>} Course object or null if not found
-   */
-  async getBySlug(slug) {
-    const courses = await this.getAll();
-    return courses.find(course => course.slug === slug) || null;
+    const course = mockCourses.find(c => c.id === id);
+    return course || null;
   }
 
   /**
    * Get courses by level
-   * @param {string} level - Course level (Principiante, Intermedio, Avanzado)
-   * @returns {Promise<Array>} List of courses matching the level
+   * @param {string} level - Level to filter by
+   * @returns {Promise<Array>} Filtered list of courses
    */
   async getByLevel(level) {
-    const courses = await this.getAll();
-    return courses.filter(course => course.nivel === level);
+    return mockCourses.filter(c => c.level === level);
   }
 
   /**
-   * Get active courses only
-   * @returns {Promise<Array>} List of active courses
+   * Get courses by teacher ID
+   * @param {string} teacherId - Teacher ID
+   * @returns {Promise<Array>} Filtered list of courses
    */
-  async getActive() {
-    const courses = await this.getAll();
-    return courses.filter(course => course.activo !== false);
+  async getByTeacher(teacherId) {
+    return mockCourses.filter(c => c.teacherId === teacherId);
   }
 
   /**
-   * Clear the cache (useful when data is updated)
+   * Get courses count by level
+   * @returns {Promise<Object>} Count of courses per level
    */
-  clearCache() {
-    this.cache = null;
+  async getCountByLevel() {
+    const counts = {
+      Principiante: 0,
+      Intermedio: 0,
+      Avanzado: 0
+    };
+    
+    mockCourses.forEach(c => {
+      if (counts.hasOwnProperty(c.level)) {
+        counts[c.level]++;
+      }
+    });
+    
+    return counts;
   }
 }
 

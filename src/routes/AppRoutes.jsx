@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
+import AcademyLayout from '../components/layout/AcademyLayout';
 import HomePage from '../pages/HomePage';
 import PalosPage from '../pages/PalosPage';
 import PaloDetailPage from '../pages/PaloDetailPage';
@@ -10,6 +11,10 @@ import ProgresoPage from '../pages/ProgresoPage';
 import AcercaPage from '../pages/AcercaPage';
 import CuentaPage from '../pages/CuentaPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import AcademyDashboard from '../pages/academy/AcademyDashboard';
+import StudentsPage from '../pages/academy/StudentsPage';
+import TeachersPage from '../pages/academy/TeachersPage';
+import CoursesPage from '../pages/academy/CoursesPage';
 
 /**
  * Main application routes
@@ -40,6 +45,15 @@ const AppRoutes = () => {
         <Route path="progreso" element={<ProgresoPage />} />
         <Route path="acerca" element={<AcercaPage />} />
         <Route path="cuenta" element={<CuentaPage />} />
+        
+        {/* Academy section */}
+        <Route path="academia" element={<AcademyLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<AcademyDashboard />} />
+          <Route path="alumnos" element={<StudentsPage />} />
+          <Route path="profesores" element={<TeachersPage />} />
+          <Route path="cursos" element={<CoursesPage />} />
+        </Route>
         
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />

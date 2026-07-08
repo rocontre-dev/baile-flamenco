@@ -46,6 +46,9 @@ const Header = () => {
           <Link to="/progreso" className={styles.navLink}>
             {t('navigation.progress')}
           </Link>
+          <Link to="/academia" className={styles.navLink}>
+            Academia
+          </Link>
           <Link to="/acerca" className={styles.navLink}>
             {t('navigation.about')}
           </Link>
