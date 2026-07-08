@@ -27,6 +27,7 @@ const LessonPage = () => {
   const [practiceMode, setPracticeMode] = useState(false);
   const [bookmarks, setBookmarks] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
+  const [practiceNotes, setPracticeNotes] = useState('');
   const playerRef = useRef(null);
 
   useEffect(() => {
@@ -133,6 +134,11 @@ const LessonPage = () => {
 
   // Sort bookmarks by time
   const sortedBookmarks = [...bookmarks].sort((a, b) => a.time - b.time);
+
+  // Practice notes handlers
+  const handleClearNotes = () => {
+    setPracticeNotes('');
+  };
 
   return (
     <div className={styles.container}>
@@ -424,6 +430,39 @@ const LessonPage = () => {
                 No hay marcadores guardados. Haz clic en "Agregar marcador" mientras reproduces para guardar un punto importante.
               </p>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== NOTAS DE PRÁCTICA ===== */}
+      <section className={styles.section}>
+        <div className={styles.sectionCard}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Notas de práctica</h2>
+          </div>
+          
+          <div className={styles.notesContainer}>
+            <textarea
+              className={styles.notesTextarea}
+              value={practiceNotes}
+              onChange={(e) => setPracticeNotes(e.target.value)}
+              placeholder="Escribe aquí tus notas de práctica..."
+              aria-label="Notas de práctica"
+            />
+            
+            <div className={styles.notesFooter}>
+              <button 
+                className={styles.clearNotesButton}
+                onClick={handleClearNotes}
+                disabled={!practiceNotes}
+                aria-label="Limpiar notas"
+              >
+                Limpiar notas
+              </button>
+              <span className={styles.notesHelp}>
+                Las notas se guardan solo durante esta sesión.
+              </span>
+            </div>
           </div>
         </div>
       </section>
