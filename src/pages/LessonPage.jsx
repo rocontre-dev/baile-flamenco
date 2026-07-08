@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Play, Pause, RotateCcw, Headphones, Eye, ListOrdered, Lightbulb, AlertTriangle, RefreshCw, ChevronRight } from 'lucide-react';
+import { Play, Pause, RotateCcw, Headphones, Eye, ListOrdered, Lightbulb, AlertTriangle, RefreshCw, ChevronRight, Plus, Edit2, Trash2 } from 'lucide-react';
 import GetExercise from '../useCases/exercises/GetExercise';
 import BeatCounter from '../components/media/BeatCounter';
 import PracticePlayer from '../components/media/PracticePlayer';
+import { formatSecondsToDuration, generateId } from '../utils/helpers';
 import Breadcrumb from '../components/navigation/Breadcrumb';
 import Button from '../components/common/Button';
 import { useTranslation } from '../i18n/i18n';
@@ -24,6 +25,9 @@ const LessonPage = () => {
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [practiceMode, setPracticeMode] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+  const [currentTime, setCurrentTime] = useState(0);
+  const playerRef = useRef(null);
 
   useEffect(() => {
     const loadExercise = async () => {
@@ -89,6 +93,46 @@ const LessonPage = () => {
     { id: 'cierre', label: 'Cierre', time: 8.8 },
     { id: 'final', label: 'Final', time: 11.5 }
   ];
+
+  // Bookmark handlers
+  const handleAddBookmark = () => {
+    const name = window.prompt('Nombre del marcador (ej: Entrada, Llamada, Letra):');
+    if (!name || name.trim() === '') return;
+    
+    const newBookmark = {
+      id: generateId(),
+      lessonId: exercise.id,
+      name: name.trim(),
+      time: currentTime
+    };
+    
+    setBookmarks(prev => [...prev, newBookmark]);
+  };
+
+  const handleGoToBookmark = (time) => {
+    if (playerRef.current) {
+      playerRef.current.seekTo(time);
+    }
+  };
+
+  const handleEditBookmark = (id) => {
+    const bookmark = bookmarks.find(b => b.id === id);
+    if (!bookmark) return;
+    
+    const newName = window.prompt('Editar nombre del marcador:', bookmark.name);
+    if (!newName || newName.trim() === '') return;
+    
+    setBookmarks(prev => prev.map(b => 
+      b.id === id ? { ...b, name: newName.trim() } : b
+    ));
+  };
+
+  const handleDeleteBookmark = (id) => {
+    setBookmarks(prev => prev.filter(b => b.id !== id));
+  };
+
+  // Sort bookmarks by time
+  const sortedBookmarks = [...bookmarks].sort((a, b) => a.time - b.time);
 
   return (
     <div className={styles.container}>
@@ -177,19 +221,23 @@ const LessonPage = () => {
           
           {/* Video - PracticePlayer */}
           <PracticePlayer
+            ref={playerRef}
             videoSrc={`/videos/${exercise.recursos?.video?.principal || ''}`}
             poster={`/images/${exercise.recursos?.video?.poster || ''}`}
             title={exercise.titulo}
             className={styles.videoPlayer}
             markers={practiceMarkers}
-            onTimeUpdate={(currentTime, duration) => {
+            onTimeUpdate={(time, duration) => {
+              // Update current time for bookmarks
+              setCurrentTime(time);
+              
               // Sincronización proporcional del BeatCounter
               const beats = exercise.contenido?.conteo && exercise.contenido.conteo.length > 0 
                 ? exercise.contenido.conteo 
                 : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
               
               if (duration > 0) {
-                const beatIndex = Math.floor((currentTime / duration) * beats.length);
+                const beatIndex = Math.floor((time / duration) * beats.length);
                 const beat = Math.min(Math.max(beatIndex + 1, 1), beats.length);
                 setCurrentBeat(beat);
               } else {
@@ -320,6 +368,65 @@ const LessonPage = () => {
           </div>
         </section>
       )}
+
+      {/* ===== MARCADORES DE PRÁCTICA ===== */}
+      <section className={styles.section}>
+        <div className={styles.sectionCard}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Marcadores</h2>
+          </div>
+          
+          <div className={styles.bookmarksContainer}>
+            {/* Botón agregar marcador */}
+            <button 
+              className={styles.addBookmarkButton}
+              onClick={handleAddBookmark}
+              aria-label="Agregar marcador"
+            >
+              <Plus size={18} />
+              <span>Agregar marcador</span>
+            </button>
+            
+            {/* Lista de marcadores */}
+            {sortedBookmarks.length > 0 ? (
+              <div className={styles.bookmarksList}>
+                {sortedBookmarks.map((bookmark) => (
+                  <div key={bookmark.id} className={styles.bookmarkItem}>
+                    <button
+                      className={styles.bookmarkInfo}
+                      onClick={() => handleGoToBookmark(bookmark.time)}
+                      aria-label={`Ir a ${bookmark.name} en ${formatSecondsToDuration(bookmark.time)}`}
+                    >
+                      <span className={styles.bookmarkName}>{bookmark.name}</span>
+                      <span className={styles.bookmarkTime}>{formatSecondsToDuration(bookmark.time)}</span>
+                    </button>
+                    <div className={styles.bookmarkActions}>
+                      <button
+                        className={styles.bookmarkActionButton}
+                        onClick={() => handleEditBookmark(bookmark.id)}
+                        aria-label={`Editar ${bookmark.name}`}
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        className={styles.bookmarkActionButton}
+                        onClick={() => handleDeleteBookmark(bookmark.id)}
+                        aria-label={`Eliminar ${bookmark.name}`}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.bookmarksEmpty}>
+                No hay marcadores guardados. Haz clic en "Agregar marcador" mientras reproduces para guardar un punto importante.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* ===== 7. REPITE EL EJERCICIO ===== */}
       {!practiceMode && (

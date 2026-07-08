@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
 import { Play, Pause, RotateCcw, Maximize, Minimize, Repeat2, Flag, X } from 'lucide-react';
 import styles from './PracticePlayer.module.css';
 
@@ -18,7 +18,7 @@ import styles from './PracticePlayer.module.css';
  * @param {Function} props.onEnded - Callback al terminar el video
  * @param {string} props.className - Clase CSS adicional para personalización
  */
-const PracticePlayer = ({
+const PracticePlayer = forwardRef(({
   videoSrc,
   poster,
   title = 'Video',
@@ -28,7 +28,18 @@ const PracticePlayer = ({
   onEnded,
   markers = [],
   className = ''
-}) => {
+}, ref) => {
+  // Expose imperative methods to parent component
+  useImperativeHandle(ref, () => ({
+    seekTo(time) {
+      if (!videoRef.current) return;
+      videoRef.current.currentTime = time;
+      setCurrentTime(time);
+    },
+    getCurrentTime() {
+      return videoRef.current?.currentTime || 0;
+    }
+  }));
   // Referencias
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -387,19 +398,6 @@ const PracticePlayer = ({
           Tu navegador no soporta la reproducción de video.
         </video>
 
-        {/* Overlay de poster (cuando no está cargado o no se está reproduciendo) */}
-        {!isPlaying && poster && (
-          <div className={styles.posterOverlay}>
-            <img src={poster} alt={title} className={styles.posterImage} />
-            <button 
-              className={styles.bigPlayButton}
-              onClick={togglePlay}
-              aria-label="Reproducir video"
-            >
-              <Play size={48} fill="currentColor" />
-            </button>
-          </div>
-        )}
 
         {/* Mensaje de error */}
         {hasError && (
@@ -604,6 +602,6 @@ const PracticePlayer = ({
       </div>
     </div>
   );
-};
+});
 
 export default PracticePlayer;
