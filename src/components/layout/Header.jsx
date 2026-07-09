@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Menu, User, Search } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
+import DemoRoleSwitcher from '../auth/DemoRoleSwitcher';
 import { useTranslation } from '../../i18n/i18n';
 import styles from './Header.module.css';
 
@@ -66,11 +67,13 @@ const Header = () => {
           </Link>
         </nav>
 
-        {/* Right section - Search and account */}
+        {/* Right section - Search, demo role switcher, and account */}
         <div className={styles.right}>
           <button className={styles.iconButton} aria-label={t('common.search')}>
             <Search size={20} />
           </button>
+          
+          <DemoRoleSwitcher />
           
           <Link to="/cuenta" className={styles.iconButton} aria-label={t('navigation.account')}>
             <User size={20} />

@@ -6,10 +6,10 @@
 export const mockTeachers = [
   {
     id: "teacher-1",
-    name: "Carmen Morales",
-    specialty: "Tangos, Alegrías",
-    email: "carmen@example.com",
-    bio: "Bailaora con 15 años de experiencia en los tablaos de Sevilla y Madrid. Especializada en tangos y alegrías.",
+    name: "Rodrigo Robles",
+    specialty: "Baile flamenco • Tangos y Alegrías",
+    email: "rorobles@tibtab.com",
+    bio: "Bailaor de flamenco, especialista en Tangos y Alegrías, y director de la academia.",
     assignedCourseIds: ["course-tangos-1", "course-alegrias-1"]
   },
   {

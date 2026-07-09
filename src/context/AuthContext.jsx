@@ -22,9 +22,24 @@ const ROLE_PERMISSIONS = {
   student: ['mis-cursos', 'detalle-curso']
 };
 
+// Demo users for role switching
+const DEMO_USERS = {
+  admin: { id: 'admin-1', role: 'admin', name: 'Administrador' },
+  teacher: { id: 'teacher-1', role: 'teacher', name: 'Carmen Morales' },
+  student: { id: 'student-1', role: 'student', name: 'María López' }
+};
+
+const DEMO_ROLE_STORAGE_KEY = 'baile-flamenco-demo-role';
+
 export const AuthProvider = ({ children }) => {
-  // User state - using mockCurrentUser for development
-  const [user, setUser] = useState(mockCurrentUser);
+  // User state - check localStorage first, then use mockCurrentUser
+  const [user, setUser] = useState(() => {
+    const savedRole = localStorage.getItem(DEMO_ROLE_STORAGE_KEY);
+    if (savedRole && DEMO_USERS[savedRole]) {
+      return DEMO_USERS[savedRole];
+    }
+    return mockCurrentUser;
+  });
   
   // Loading state
   const [loading, setLoading] = useState(false); // No loading needed for mock
@@ -81,14 +96,9 @@ export const AuthProvider = ({ children }) => {
   
   // Switch user role (for development/testing)
   const switchRole = (newRole) => {
-    const mockUsers = {
-      admin: { id: 'admin-1', role: 'admin', name: 'Administrador' },
-      teacher: { id: 'teacher-1', role: 'teacher', name: 'Carmen Morales' },
-      student: { id: 'student-1', role: 'student', name: 'María López' }
-    };
-    
-    if (mockUsers[newRole]) {
-      setUser(mockUsers[newRole]);
+    if (DEMO_USERS[newRole]) {
+      setUser(DEMO_USERS[newRole]);
+      localStorage.setItem(DEMO_ROLE_STORAGE_KEY, newRole);
     }
   };
   

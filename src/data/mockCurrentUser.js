@@ -21,7 +21,7 @@ export const mockCurrentUser = {
   // ===== TEACHER =====
   id: "teacher-1",
   role: "teacher",
-  name: "Carmen Morales",
+  name: "Rodrigo Robles",
   
   // ===== STUDENT =====
   // id: "student-1",
