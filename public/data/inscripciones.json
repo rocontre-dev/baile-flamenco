@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ins-001",
+    "alumnoId": "alum-001",
+    "cursoId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "fechaInscripcion": "2026-01-20",
+    "activo": true,
+    "progreso": 25
+  },
+  {
+    "id": "ins-002",
+    "alumnoId": "alum-002",
+    "cursoId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "fechaInscripcion": "2026-02-25",
+    "activo": true,
+    "progreso": 60
+  }
+]

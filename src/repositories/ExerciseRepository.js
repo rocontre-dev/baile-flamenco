@@ -63,10 +63,21 @@ class ExerciseRepository {
    * Get exercises by category ID
    * @param {string} categoriaId - Category ID
    * @returns {Promise<Array>} List of exercises for the category
+   * @deprecated Use getByTipo() instead. Category-based filtering is transitional.
    */
   async getByCategoria(categoriaId) {
     const exercises = await this.getAll();
     return exercises.filter(ex => ex.categoriaId === categoriaId);
+  }
+
+  /**
+   * Get exercises by type (remate, marcaje, llamada, etc.)
+   * @param {string} tipo - Exercise type
+   * @returns {Promise<Array>} List of exercises matching the type
+   */
+  async getByTipo(tipo) {
+    const exercises = await this.getAll();
+    return exercises.filter(ex => ex.tipo === tipo);
   }
 
   /**

@@ -69,6 +69,18 @@ class LessonRepository {
   }
 
   /**
+   * Get lessons by course ID
+   * @param {string} cursoId - Course ID
+   * @returns {Promise<Array>} List of lessons for the course
+   */
+  async getByCurso(cursoId) {
+    const lessons = await this.getAll();
+    return lessons
+      .filter(lesson => lesson.cursoId === cursoId)
+      .sort((a, b) => a.orden - b.orden);
+  }
+
+  /**
    * Clear the cache
    */
   clearCache() {

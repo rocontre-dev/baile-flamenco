@@ -8,7 +8,7 @@
     "profesorId": "prof-001",
     "imagen": "curso-iniciacion.jpg",
     "duracion": "12 semanas",
-    "modulos": ["mod-001"],
+    "lecciones": ["lec-001"],
     "orden": 1,
     "activo": true
   }

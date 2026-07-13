@@ -2,9 +2,12 @@
   {
     "id": "ej-001",
     "leccionId": "lec-001",
+    "paloId": "palo-001",
+    "categoriaId": "cat-004",
     "titulo": "Remate básico por Tangos",
     "subtitulo": "Fundamento esencial",
     "slug": "remate-basico",
+    "tipo": "remate",
     "descripcion": "Remate básico de doce tiempos que sirve como cierre elegante y contundente al final de una secuencia.",
     "objetivo": "Aprender a cerrar secuencias con elegancia y precisión, marcando correctamente los acentos del compás.",
     "nivel": "Principiante",
@@ -15,14 +18,39 @@
     
     "recursos": {
       "video": {
-        "principal": "tangos-remate-feet.mp4",
-        "poster": "tangos-remate-poster.png"
+        "poster": "tangos-remate-poster.png",
+        "principal": "version-pies",
+        "versiones": [
+          {
+            "id": "version-pies",
+            "angulo": "pies",
+            "archivo": "tangos-remate-feet.mp4",
+            "esPrincipal": true
+          },
+          {
+            "id": "version-frontal",
+            "angulo": "frontal",
+            "archivo": "tangos-remate-front.mp4",
+            "esPrincipal": false
+          },
+          {
+            "id": "version-lateral",
+            "angulo": "lateral",
+            "archivo": "tangos-remate-lateral.mp4",
+            "esPrincipal": false
+          },
+          {
+            "id": "version-espejo",
+            "angulo": "espejo",
+            "archivo": "tangos-remate-mirror.mp4",
+            "esPrincipal": false
+          }
+        ]
       },
       "audio": {
         "compas": "compas-tangos.mp3"
       },
-      "imagen": {
-        "gif": "gif-remate.gif",
+      "imagenes": {
         "miniaturas": [
           "tangos-remate-front-01.jpg",
           "tangos-remate-front-02.jpg",
@@ -31,6 +59,37 @@
           "tangos-remate-front-05.jpg",
           "tangos-remate-front-06.jpg"
         ]
+      }
+    },
+    
+    "practiceData": {
+      "beatMap": {
+        "beats": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        "accentBeats": [1, 3, 5, 7, 9, 11],
+        "estructura": {
+          "marcaje": { "inicio": 1, "fin": 3 },
+          "viaje": { "inicio": 4, "fin": 6 },
+          "cierre": { "inicio": 7, "fin": 12 }
+        }
+      },
+      "marcadoresSugeridos": [
+        { "id": "inicio", "label": "Inicio", "tiempo": 0 },
+        { "id": "marcaje", "label": "Marcaje", "tiempo": 2.5 },
+        { "id": "cierre", "label": "Cierre", "tiempo": 8.8 },
+        { "id": "final", "label": "Final", "tiempo": 11.5 }
+      ],
+      "loopsRecomendados": [
+        {
+          "id": "practicar_cierre",
+          "label": "Practicar cierre",
+          "a": 8.8,
+          "b": 11.5
+        }
+      ],
+      "configuracion": {
+        "velocidadRecomendada": 1,
+        "mostrarBeatCounter": true,
+        "anguloPrincipal": "pies"
       }
     },
     

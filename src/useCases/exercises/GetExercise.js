@@ -22,8 +22,25 @@ class GetExercise {
     // Get related data
     const profesor = await TeacherRepository.getById(exercise.profesorId);
     const lesson = await LessonRepository.getById(exercise.leccionId);
-    const categoria = await CategoryRepository.getById(lesson?.categoriaId);
-    const palo = await PaloRepository.getById(categoria?.paloId);
+    
+    // Get palo - prefer direct paloId, fallback to category-based lookup for compatibility
+    // TODO: Remove category-based lookup once all exercises have paloId
+    let palo = null;
+    if (exercise.paloId) {
+      palo = await PaloRepository.getById(exercise.paloId);
+    } else if (lesson?.categoriaId) {
+      const categoria = await CategoryRepository.getById(lesson.categoriaId);
+      palo = await PaloRepository.getById(categoria?.paloId);
+    }
+    
+    // Get categoria for backward compatibility (transitional)
+    // TODO: Remove once category-based routing is deprecated
+    let categoria = null;
+    if (lesson?.categoriaId) {
+      categoria = await CategoryRepository.getById(lesson.categoriaId);
+    } else if (exercise.categoriaId) {
+      categoria = await CategoryRepository.getById(exercise.categoriaId);
+    }
     
     // Return enriched exercise
     return {

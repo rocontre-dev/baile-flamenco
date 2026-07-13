@@ -85,13 +85,56 @@ const LessonPage = () => {
     return `/palos/${paloSlug}/${categoriaSlug}`;
   };
 
-  // Marcadores temporales para práctica (fácil de mover al JSON después)
-  const practiceMarkers = [
-    { id: 'inicio', label: 'Inicio', time: 0 },
-    { id: 'marcaje', label: 'Marcaje', time: 2.5 },
-    { id: 'cierre', label: 'Cierre', time: 8.8 },
-    { id: 'final', label: 'Final', time: 11.5 }
-  ];
+  // Helper: Get video URL from new resource structure
+  // Resuelve la versión principal del video desde la nueva estructura de versiones
+  const getVideoSrc = () => {
+    const videoConfig = exercise.recursos?.video;
+    if (!videoConfig) return '';
+    
+    // Nueva estructura con versiones
+    if (videoConfig.versiones && videoConfig.principal) {
+      const versionPrincipal = videoConfig.versiones.find(v => v.id === videoConfig.principal);
+      if (versionPrincipal) {
+        return `/videos/${versionPrincipal.archivo}`;
+      }
+    }
+    
+    // Estructura antigua (compatibilidad)
+    if (videoConfig.principal && typeof videoConfig.principal === 'string') {
+      return `/videos/${videoConfig.principal}`;
+    }
+    
+    return '';
+  };
+
+  // Helper: Get markers from practiceData or fallback to empty array
+  const getMarkers = () => {
+    // Nueva estructura desde practiceData
+    if (exercise.practiceData?.marcadoresSugeridos) {
+      return exercise.practiceData.marcadoresSugeridos.map(m => ({
+        id: m.id,
+        label: m.label,
+        time: m.tiempo
+      }));
+    }
+    return [];
+  };
+
+  // Helper: Get beats from practiceData or fallback to contenido.conteo
+  const getBeats = () => {
+    if (exercise.practiceData?.beatMap?.beats) {
+      return exercise.practiceData.beatMap.beats;
+    }
+    return exercise.contenido?.conteo || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  };
+
+  // Helper: Get accent beats from practiceData or fallback to palo.acentos
+  const getAccentBeats = () => {
+    if (exercise.practiceData?.beatMap?.accentBeats) {
+      return exercise.practiceData.beatMap.accentBeats;
+    }
+    return exercise.palo?.acentos || [1, 3, 5, 7, 9, 11];
+  };
 
   // Bookmark handlers
   const handleAddBookmark = () => {
@@ -226,19 +269,17 @@ const LessonPage = () => {
           {/* Video - PracticePlayer */}
           <PracticePlayer
             ref={playerRef}
-            videoSrc={`/videos/${exercise.recursos?.video?.principal || ''}`}
+            videoSrc={getVideoSrc()}
             poster={`/images/${exercise.recursos?.video?.poster || ''}`}
             title={exercise.titulo}
             className={styles.videoPlayer}
-            markers={practiceMarkers}
+            markers={getMarkers()}
             onTimeUpdate={(time, duration) => {
               // Update current time for bookmarks
               setCurrentTime(time);
               
               // Sincronización proporcional del BeatCounter
-              const beats = exercise.contenido?.conteo && exercise.contenido.conteo.length > 0 
-                ? exercise.contenido.conteo 
-                : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+              const beats = getBeats();
               
               if (duration > 0) {
                 const beatIndex = Math.floor((time / duration) * beats.length);
@@ -263,9 +304,9 @@ const LessonPage = () => {
           <div className={styles.beatCounterWrapper}>
             <h3 className={styles.subsectionTitle}>Compás</h3>
             <BeatCounter
-              beats={exercise.contenido?.conteo && exercise.contenido.conteo.length > 0 ? exercise.contenido.conteo : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+              beats={getBeats()}
               currentBeat={currentBeat}
-              accentBeats={exercise.palo?.acentos && exercise.palo.acentos.length > 0 ? exercise.palo.acentos : [1, 3, 5, 7, 9, 11]}
+              accentBeats={getAccentBeats()}
               onBeatClick={setCurrentBeat}
             />
           </div>

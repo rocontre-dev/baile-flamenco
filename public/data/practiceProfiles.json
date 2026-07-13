@@ -1,0 +1,35 @@
+[
+  {
+    "id": "pp-001",
+    "alumnoId": "alum-001",
+    "preferencias": {
+      "velocidadPredeterminada": 1,
+      "idioma": "es",
+      "modoPracticaPorDefecto": false,
+      "mostrarBeatCounter": true,
+      "tema": "claro",
+      "anguloFavorito": "pies"
+    },
+    "marcadoresPersonales": [
+      {
+        "ejercicioId": "ej-001",
+        "nombre": "mi entrada",
+        "tiempo": 3.2,
+        "creadoEn": "2026-07-10"
+      }
+    ]
+  },
+  {
+    "id": "pp-002",
+    "alumnoId": "alum-002",
+    "preferencias": {
+      "velocidadPredeterminada": 0.75,
+      "idioma": "es",
+      "modoPracticaPorDefecto": true,
+      "mostrarBeatCounter": true,
+      "tema": "oscuro",
+      "anguloFavorito": "frontal"
+    },
+    "marcadoresPersonales": []
+  }
+]

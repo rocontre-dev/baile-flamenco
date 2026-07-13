@@ -1,67 +1,66 @@
-import { mockStudents } from '../data/mockStudents';
+import { fetchData } from '../utils/helpers';
 
 /**
- * Student Repository
- * Manages student data operations (mock only - no backend)
+ * Repository for student data access
+ * Responsible only for fetching data, no business logic
  */
 class StudentRepository {
+  constructor() {
+    this.endpoint = 'alumnos.json';
+    this.cache = null;
+  }
+
   /**
-   * Get all students
+   * Fetch all students
    * @returns {Promise<Array>} List of all students
    */
   async getAll() {
-    return mockStudents;
+    if (this.cache) return this.cache;
+    
+    try {
+      const data = await fetchData(this.endpoint);
+      this.cache = data;
+      return data;
+    } catch (error) {
+      console.error('StudentRepository.getAll error:', error);
+      throw error;
+    }
   }
 
   /**
    * Get a student by ID
    * @param {string} id - Student ID
-   * @returns {Promise<Object|null>} Student data or null if not found
+   * @returns {Promise<Object|null>} Student object or null if not found
    */
   async getById(id) {
-    const student = mockStudents.find(s => s.id === id);
-    return student || null;
+    const students = await this.getAll();
+    return students.find(student => student.id === id) || null;
   }
 
   /**
-   * Search students by name
-   * @param {string} query - Search query
-   * @returns {Promise<Array>} Filtered list of students
+   * Get active students only
+   * @returns {Promise<Array>} List of active students
    */
-  async search(query) {
-    const lowerQuery = query.toLowerCase();
-    return mockStudents.filter(s => 
-      s.name.toLowerCase().includes(lowerQuery)
-    );
+  async getActive() {
+    const students = await this.getAll();
+    return students.filter(student => student.activo !== false);
   }
 
   /**
-   * Filter students by level
-   * @param {string} level - Level to filter by
-   * @returns {Promise<Array>} Filtered list of students
+   * Get students by level
+   * @param {string} level - Student level
+   * @returns {Promise<Array>} List of students matching the level
    */
   async getByLevel(level) {
-    return mockStudents.filter(s => s.level === level);
+    const students = await this.getAll();
+    return students.filter(student => student.nivel === level);
   }
 
   /**
-   * Get students count by level
-   * @returns {Promise<Object>} Count of students per level
+   * Clear the cache
    */
-  async getCountByLevel() {
-    const counts = {
-      Principiante: 0,
-      Intermedio: 0,
-      Avanzado: 0
-    };
-    
-    mockStudents.forEach(s => {
-      if (counts.hasOwnProperty(s.level)) {
-        counts[s.level]++;
-      }
-    });
-    
-    return counts;
+  clearCache() {
+    this.cache = null;
   }
 }
 

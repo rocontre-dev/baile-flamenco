@@ -1,0 +1,28 @@
+[
+  {
+    "id": "prog-001",
+    "alumnoId": "alum-001",
+    "ejercicioId": "ej-001",
+    "leccionId": "lec-001",
+    "estado": "en_progreso",
+    "tiempoPracticado": 180,
+    "ultimaPractica": "2026-07-10",
+    "marcadoresPersonales": [
+      {
+        "id": "marker-001",
+        "nombre": "mi entrada",
+        "tiempo": 3.2
+      }
+    ]
+  },
+  {
+    "id": "prog-002",
+    "alumnoId": "alum-002",
+    "ejercicioId": "ej-001",
+    "leccionId": "lec-001",
+    "estado": "completado",
+    "tiempoPracticado": 450,
+    "ultimaPractica": "2026-07-12",
+    "marcadoresPersonales": []
+  }
+]

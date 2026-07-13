@@ -1,0 +1,26 @@
+[
+  {
+    "id": "alum-001",
+    "nombre": "María García",
+    "email": "maria.garcia@email.com",
+    "nivel": "Principiante",
+    "activo": true,
+    "fechaRegistro": "2026-01-15"
+  },
+  {
+    "id": "alum-002",
+    "nombre": "Juan Martínez",
+    "email": "juan.martinez@email.com",
+    "nivel": "Intermedio",
+    "activo": true,
+    "fechaRegistro": "2026-02-20"
+  },
+  {
+    "id": "alum-003",
+    "nombre": "Ana López",
+    "email": "ana.lopez@email.com",
+    "nivel": "Principiante",
+    "activo": false,
+    "fechaRegistro": "2026-03-10"
+  }
+]
