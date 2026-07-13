@@ -7,7 +7,6 @@ import PracticePlayer from '../components/media/PracticePlayer';
 import { formatSecondsToDuration, generateId } from '../utils/helpers';
 import Breadcrumb from '../components/navigation/Breadcrumb';
 import Button from '../components/common/Button';
-import { useTranslation } from '../i18n/i18n';
 import styles from './LessonPage.module.css';
 
 /**
@@ -16,7 +15,6 @@ import styles from './LessonPage.module.css';
  */
 const LessonPage = () => {
   const { paloSlug, categoriaSlug, ejercicioSlug } = useParams();
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const [exercise, setExercise] = useState(null);
   const [loading, setLoading] = useState(true);

@@ -58,9 +58,16 @@ const Header = () => {
             </Link>
           )}
           {!showAcademiaLink && (
-            <Link to="/mis-cursos" className={styles.navLink}>
-              Mis Cursos
-            </Link>
+            <>
+              <Link to="/mis-cursos" className={styles.navLink}>
+                Mis Cursos
+              </Link>
+              {hasRole('student') && (
+                <Link to="/mi-perfil" className={styles.navLink}>
+                  Mi Perfil
+                </Link>
+              )}
+            </>
           )}
           <Link to="/acerca" className={styles.navLink}>
             {t('navigation.about')}

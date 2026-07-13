@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Users, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Users, Mail, Eye } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import GetTeacherStudents from '../../useCases/teachers/GetTeacherStudents';
 import styles from '../academy/AcademyPages.module.css';
@@ -70,6 +71,13 @@ const MyStudentsPage = () => {
                 <p className={styles.studentLessons}>
                   <strong>Cursos:</strong> {student.assignedCourseIds.length} asignado(s)
                 </p>
+                <Link
+                  to={`/academia/alumnos/${student.id}`}
+                  className={styles.viewDetailLink}
+                >
+                  <Eye size={14} />
+                  Ver perfil
+                </Link>
               </div>
             </div>
           ))}

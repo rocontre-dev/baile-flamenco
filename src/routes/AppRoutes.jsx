@@ -18,8 +18,10 @@ import TeachersPage from '../pages/academy/TeachersPage';
 import CoursesPage from '../pages/academy/CoursesPage';
 import CourseDetailPage from '../pages/academy/CourseDetailPage';
 import MyCoursesPageStudent from '../pages/student/MyCoursesPage';
+import MyProfilePage from '../pages/student/MyProfilePage';
 import MyCoursesPageTeacher from '../pages/teacher/MyCoursesPage';
 import MyStudentsPage from '../pages/teacher/MyStudentsPage';
+import StudentProfilePage from '../pages/academy/StudentProfilePage';
 
 /**
  * Main application routes
@@ -81,10 +83,24 @@ const AppRoutes = () => {
           <Route index element={<MyStudentsPage />} />
         </Route>
         
+        {/* Student Profile - accessible only by teacher (not admin) */}
+        <Route path="academia/alumnos/:studentId" element={
+          <RoleGuard allowedRoles={['teacher']}>
+            <AcademyLayout />
+          </RoleGuard>
+        }>
+          <Route index element={<StudentProfilePage />} />
+        </Route>
+        
         {/* Student routes */}
         <Route path="mis-cursos" element={
           <RoleGuard allowedRoles={['admin', 'teacher', 'student']}>
             <MyCoursesPageStudent />
+          </RoleGuard>
+        } />
+        <Route path="mi-perfil" element={
+          <RoleGuard allowedRoles={['student']}>
+            <MyProfilePage />
           </RoleGuard>
         } />
         

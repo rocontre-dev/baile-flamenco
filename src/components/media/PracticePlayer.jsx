@@ -321,7 +321,7 @@ const PracticePlayer = forwardRef(({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [onEnded, abLoopEnabled, pointA, pointB]);
+  }, [onEnded, isLooping, abLoopEnabled, pointA, pointB]);
 
   // Loop de actualización
   useEffect(() => {
