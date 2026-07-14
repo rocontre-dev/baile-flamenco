@@ -1,16 +1,31 @@
-import { mockCourses } from '../data/mockCourses';
+import { fetchData } from '../utils/helpers';
 
 /**
  * Course Repository
- * Manages course data operations (mock only - no backend)
+ * Manages course data operations from public/data/cursos.json
+ * Updated to use fetchData instead of mock data
  */
 class CourseRepository {
+  constructor() {
+    this.endpoint = 'cursos.json';
+    this.cache = null;
+  }
+
   /**
    * Get all courses
    * @returns {Promise<Array>} List of all courses
    */
   async getAll() {
-    return mockCourses;
+    if (this.cache) return this.cache;
+    
+    try {
+      const data = await fetchData(this.endpoint);
+      this.cache = data;
+      return data;
+    } catch (error) {
+      console.error('CourseRepository.getAll error:', error);
+      throw error;
+    }
   }
 
   /**
@@ -19,7 +34,8 @@ class CourseRepository {
    * @returns {Promise<Object|null>} Course data or null if not found
    */
   async getById(id) {
-    const course = mockCourses.find(c => c.id === id);
+    const courses = await this.getAll();
+    const course = courses.find(c => c.id === id);
     return course || null;
   }
 
@@ -29,7 +45,8 @@ class CourseRepository {
    * @returns {Promise<Array>} Filtered list of courses
    */
   async getByLevel(level) {
-    return mockCourses.filter(c => c.level === level);
+    const courses = await this.getAll();
+    return courses.filter(c => c.nivel === level);
   }
 
   /**
@@ -38,27 +55,24 @@ class CourseRepository {
    * @returns {Promise<Array>} Filtered list of courses
    */
   async getByTeacher(teacherId) {
-    return mockCourses.filter(c => c.teacherId === teacherId);
+    const courses = await this.getAll();
+    return courses.filter(c => c.profesorId === teacherId);
   }
 
   /**
-   * Get courses count by level
-   * @returns {Promise<Object>} Count of courses per level
+   * Get active courses only
+   * @returns {Promise<Array>} List of active courses
    */
-  async getCountByLevel() {
-    const counts = {
-      Principiante: 0,
-      Intermedio: 0,
-      Avanzado: 0
-    };
-    
-    mockCourses.forEach(c => {
-      if (counts.hasOwnProperty(c.level)) {
-        counts[c.level]++;
-      }
-    });
-    
-    return counts;
+  async getActive() {
+    const courses = await this.getAll();
+    return courses.filter(c => c.activo !== false);
+  }
+
+  /**
+   * Clear the cache
+   */
+  clearCache() {
+    this.cache = null;
   }
 }
 

@@ -1,0 +1,21 @@
+/* ===== Teacher Layout ===== */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-cream);
+}
+
+.main {
+  flex: 1;
+  padding: var(--spacing-xl);
+  margin-left: 260px;
+  transition: margin-left var(--transition-normal);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    padding: var(--spacing-md);
+  }
+}

@@ -1,69 +1,77 @@
-import { mockCourses } from '../../data/mockCourses';
-import { mockStudents } from '../../data/mockStudents';
-import { mockPracticePlans } from '../../data/mockPracticePlans';
+import CourseRepository from '../../repositories/CourseRepository';
+import StudentRepository from '../../repositories/StudentRepository';
+import EnrollmentRepository from '../../repositories/EnrollmentRepository';
+import LessonRepository from '../../repositories/LessonRepository';
+import ExerciseRepository from '../../repositories/ExerciseRepository';
+import TeacherRepository from '../../repositories/TeacherRepository';
 
 /**
  * Use case: Get dashboard data for teacher
- * Returns only information related to the teacher's courses and students
+ * Returns information related to the academy's courses, students, and content
+ * Updated to use repositories connected to public/data/ JSON files
  */
 class GetTeacherDashboardData {
-  async execute(teacherId) {
-    // Get courses taught by this teacher
-    const teacherCourses = mockCourses.filter(course => course.teacherId === teacherId);
-    const teacherCourseIds = teacherCourses.map(c => c.id);
+  async execute() {
+    // Get all data from repositories
+    const [courses, students, enrollments, lessons, exercises, teachers] = await Promise.all([
+      CourseRepository.getAll(),
+      StudentRepository.getAll(),
+      EnrollmentRepository.getAll(),
+      LessonRepository.getAll(),
+      ExerciseRepository.getActive(),
+      TeacherRepository.getAll()
+    ]);
 
-    // Get students enrolled in teacher's courses
-    const teacherStudents = mockStudents.filter(student =>
-      student.assignedCourseIds.some(courseId => teacherCourseIds.includes(courseId))
-    );
+    // Calculate metrics
+    const totalStudents = students.length;
+    const activeStudents = students.filter(s => s.activo !== false).length;
+    const totalCourses = courses.length;
+    const totalLessons = lessons.length;
+    const totalExercises = exercises.length;
+    const activeEnrollments = enrollments.filter(e => e.activo !== false).length;
 
-    // Calculate total lessons in teacher's courses
-    const totalLessons = teacherCourses.reduce((sum, course) => sum + course.lessons.length, 0);
+    // Build recent courses (limit to 5, sorted by order)
+    const recentCourses = courses
+      .sort((a, b) => (a.orden || 0) - (b.orden || 0))
+      .slice(0, 5)
+      .map(course => ({
+        id: course.id,
+        titulo: course.titulo,
+        nivel: course.nivel,
+        profesorId: course.profesorId,
+        leccionesCount: course.lecciones?.length || 0,
+        profesor: teachers.find(t => t.id === course.profesorId)?.nombre || 'Sin profesor'
+      }));
 
-    // Get active practice plans (Pendiente or En Progreso) for teacher's students
-    const activePlans = mockPracticePlans.filter(plan =>
-      plan.studentId && teacherStudents.some(s => s.id === plan.studentId) &&
-      plan.status !== 'Completado'
-    );
-
-    // Build recent courses (sorted by student count)
-    const recentCourses = teacherCourses.map(course => ({
-      id: course.id,
-      name: course.name,
-      level: course.level,
-      palo: course.palo,
-      studentCount: course.studentCount
-    })).sort((a, b) => b.studentCount - a.studentCount);
-
-    // Build students list
-    const students = teacherStudents.map(student => ({
-      id: student.id,
-      name: student.name,
-      level: student.level,
-      email: student.email,
-      sharedCourses: student.assignedCourseIds.filter(id => teacherCourseIds.includes(id)).length
-    }));
-
-    // Build active plans list
-    const activePlansList = activePlans.map(plan => ({
-      id: plan.id,
-      studentName: mockStudents.find(s => s.id === plan.studentId)?.name || 'Desconocido',
-      title: plan.title,
-      priority: plan.priority,
-      dueDate: plan.dueDate,
-      status: plan.status
-    })).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    // Build recent students (limit to 5, sorted by registration date or order)
+    const recentStudents = students
+      .sort((a, b) => {
+        // Sort by fechaRegistro if available, otherwise by id
+        if (a.fechaRegistro && b.fechaRegistro) {
+          return new Date(a.fechaRegistro) - new Date(b.fechaRegistro);
+        }
+        return a.id.localeCompare(b.id);
+      })
+      .slice(0, 5)
+      .map(student => ({
+        id: student.id,
+        nombre: student.nombre,
+        email: student.email,
+        nivel: student.nivel,
+        activo: student.activo !== false
+      }));
 
     return {
-      summary: {
-        courses: teacherCourses.length,
-        students: teacherStudents.length,
-        lessons: totalLessons,
-        activePlans: activePlans.length
+      metricas: {
+        totalAlumnos: totalStudents,
+        alumnosActivos: activeStudents,
+        totalCursos: totalCourses,
+        totalLecciones: totalLessons,
+        totalEjercicios: totalExercises,
+        inscripcionesActivas: activeEnrollments
       },
-      recentCourses,
-      students,
-      activePlans: activePlansList
+      cursosRecientes: recentCourses,
+      alumnosRecientes: recentStudents
     };
   }
 }

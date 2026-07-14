@@ -22,6 +22,11 @@ import MyProfilePage from '../pages/student/MyProfilePage';
 import MyCoursesPageTeacher from '../pages/teacher/MyCoursesPage';
 import MyStudentsPage from '../pages/teacher/MyStudentsPage';
 import StudentProfilePage from '../pages/academy/StudentProfilePage';
+import TeacherLayout from '../components/layout/TeacherLayout';
+import TeacherDashboardPage from '../pages/teacher/TeacherDashboardPage';
+import TeacherStudentsPage from '../pages/teacher/TeacherStudentsPage';
+import TeacherCoursesPage from '../pages/teacher/TeacherCoursesPage';
+import TeacherContentPage from '../pages/teacher/TeacherContentPage';
 
 /**
  * Main application routes
@@ -103,6 +108,14 @@ const AppRoutes = () => {
             <MyProfilePage />
           </RoleGuard>
         } />
+        
+        {/* Teacher Area - Separate layout */}
+        <Route path="profesor" element={<TeacherLayout />}>
+          <Route index element={<TeacherDashboardPage />} />
+          <Route path="alumnos" element={<TeacherStudentsPage />} />
+          <Route path="cursos" element={<TeacherCoursesPage />} />
+          <Route path="contenido" element={<TeacherContentPage />} />
+        </Route>
         
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />

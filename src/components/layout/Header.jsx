@@ -57,6 +57,9 @@ const Header = () => {
               Academia
             </Link>
           )}
+          <Link to="/profesor" className={`${styles.navLink} ${styles.teacherPanel}`}>
+            Panel del profesor
+          </Link>
           {!showAcademiaLink && (
             <>
               <Link to="/mis-cursos" className={styles.navLink}>

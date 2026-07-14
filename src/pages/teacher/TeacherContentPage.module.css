@@ -1,0 +1,135 @@
+/* ===== Teacher Content Page ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.headerIcon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Placeholder */
+.placeholder {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.placeholderContent {
+  background-color: white;
+  padding: var(--spacing-3xl);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.placeholderIcon {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.placeholderContent h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.placeholderContent p {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto var(--spacing-xl) auto;
+}
+
+.placeholderActions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.backLink:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+/* Info Section */
+.infoSection {
+  background-color: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.infoSection h3 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.featuresList li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding-left: var(--spacing-lg);
+  position: relative;
+  color: var(--color-text);
+  font-size: 0.9375rem;
+}
+
+.featuresList li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-gold);
+  font-weight: 700;
+}

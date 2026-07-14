@@ -1,0 +1,320 @@
+/* ===== Teacher Dashboard Page ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.header h1 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Loading & Error States */
+.loading,
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  gap: var(--spacing-md);
+}
+
+.loadingIcon {
+  color: var(--color-primary);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error h2 {
+  color: #dc2626;
+  margin: 0;
+}
+
+.retryButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.retryButton:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Metrics Section */
+.metricsSection {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.metricCard {
+  background-color: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.metricIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(143, 29, 50, 0.1);
+  border-radius: var(--border-radius-md);
+  color: var(--color-primary);
+}
+
+.metricContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.metricValue {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.metricLabel {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Section */
+.section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.sectionHeader h2 {
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.viewAllLink {
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.viewAllLink:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Courses Grid */
+.coursesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.courseCard {
+  background-color: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.courseCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.courseTitle {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: 1.4;
+}
+
+.courseMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.courseProfesor {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.courseLessons {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.badge {
+  display: inline-flex;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badgeLevel {
+  background-color: rgba(143, 29, 50, 0.12);
+  color: var(--color-primary);
+}
+
+/* Students Table */
+.studentsTable {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.studentsTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.studentsTable th,
+.studentsTable td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.studentsTable th {
+  background-color: var(--color-cream);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.studentsTable tr:last-child td {
+  border-bottom: none;
+}
+
+.studentsTable tr:hover td {
+  background-color: rgba(143, 29, 50, 0.02);
+}
+
+.studentName {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.studentEmail {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.status {
+  display: inline-flex;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.statusActive {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.statusInactive {
+  background-color: rgba(156, 163, 175, 0.12);
+  color: #9ca3af;
+}
+
+/* Empty State */
+.emptyState {
+  padding: var(--spacing-2xl);
+  text-align: center;
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  border: 1px dashed var(--color-border);
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metricCard {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--spacing-lg);
+  }
+
+  .coursesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .studentsTable {
+    overflow-x: auto;
+  }
+
+  .studentsTable table {
+    min-width: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
