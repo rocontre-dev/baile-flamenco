@@ -27,6 +27,7 @@ import TeacherDashboardPage from '../pages/teacher/TeacherDashboardPage';
 import TeacherStudentsPage from '../pages/teacher/TeacherStudentsPage';
 import TeacherCoursesPage from '../pages/teacher/TeacherCoursesPage';
 import TeacherContentPage from '../pages/teacher/TeacherContentPage';
+import TeacherNotebookPage from '../pages/teacher/TeacherNotebookPage';
 import { ROLES } from '../config/roles';
 
 /**
@@ -75,6 +76,7 @@ const AppRoutes = () => {
         <Route path="cursos" element={<TeacherCoursesPage />} />
         <Route path="alumnos" element={<TeacherStudentsPage />} />
         <Route path="alumnos/:studentId" element={<StudentProfilePage />} />
+        <Route path="alumnos/:studentId/cuaderno" element={<TeacherNotebookPage />} />
         <Route path="planes-practica" element={<TeacherContentPage />} />
         <Route path="contenido" element={<TeacherContentPage />} />
       </Route>

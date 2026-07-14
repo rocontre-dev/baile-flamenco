@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Users, Eye, Search } from 'lucide-react';
+import { Users, Eye, Search, BookOpen } from 'lucide-react';
 import GetStudents from '../../useCases/students/GetStudents';
 import GetCourses from '../../useCases/courses/GetCourses';
 import styles from './TeacherStudentsPage.module.css';
@@ -128,14 +128,24 @@ const TeacherStudentsPage = () => {
                   <strong>Activo:</strong> {student.activo ? 'Sí' : 'No'}
                 </div>
               </div>
-              <button
-                className={styles.viewProfileButton}
-                onClick={() => navigate(`/profesor/alumnos/${student.id}`)}
-                aria-label={`Ver perfil de ${student.nombre}`}
-              >
-                <Eye size={16} />
-                Ver perfil
-              </button>
+              <div className={styles.studentActions}>
+                <button
+                  className={styles.viewProfileButton}
+                  onClick={() => navigate(`/profesor/alumnos/${student.id}/cuaderno`)}
+                  aria-label={`Abrir cuaderno de ${student.nombre}`}
+                >
+                  <BookOpen size={16} />
+                  Cuaderno
+                </button>
+                <button
+                  className={styles.viewProfileButton}
+                  onClick={() => navigate(`/profesor/alumnos/${student.id}`)}
+                  aria-label={`Ver perfil de ${student.nombre}`}
+                >
+                  <Eye size={16} />
+                  Perfil
+                </button>
+              </div>
             </div>
           ))}
         </div>

@@ -36,6 +36,14 @@
   margin-bottom: var(--spacing-xl);
 }
 
+/* Header Actions */
+.headerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
 /* Back Button */
 .backButton {
   display: inline-flex;
@@ -49,13 +57,31 @@
   font-size: 0.875rem;
   cursor: pointer;
   transition: all var(--transition-fast);
-  margin-bottom: var(--spacing-lg);
 }
 
 .backButton:hover {
   background: var(--color-background-hover);
   border-color: var(--color-gold);
   color: var(--color-gold);
+}
+
+/* Notebook Link */
+.notebookLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-primary);
+  border-radius: var(--border-radius-md);
+  color: white;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.notebookLink:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
 }
 
 /* Header */

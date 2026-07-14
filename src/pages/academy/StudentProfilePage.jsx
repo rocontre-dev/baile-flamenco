@@ -170,14 +170,22 @@ const StudentProfilePage = () => {
 
   return (
     <div className={styles.container}>
-      {/* Back Button */}
-      <button
-        className={styles.backButton}
-        onClick={() => navigate(getBackRoute())}
-      >
-        <ChevronLeft size={18} />
-        Volver
-      </button>
+      {/* Back Button and Notebook Link */}
+      <div className={styles.headerActions}>
+        <button
+          className={styles.backButton}
+          onClick={() => navigate(getBackRoute())}
+        >
+          <ChevronLeft size={18} />
+          Volver
+        </button>
+        {(hasRole('teacher') || hasRole('TEACHER')) && (
+          <Link to={`/profesor/alumnos/${student.id}/cuaderno`} className={styles.notebookLink}>
+            <BookOpen size={16} />
+            Abrir cuaderno
+          </Link>
+        )}
+      </div>
 
       {/* Header */}
       <div className={styles.header}>
