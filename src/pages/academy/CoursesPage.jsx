@@ -10,27 +10,54 @@ import styles from './AcademyPages.module.css';
  */
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadCourses = async () => {
+      setError(null);
+      setIsLoading(true);
+
       try {
         const data = await GetCourses.execute();
-        setCourses(data);
+        // Ensure data is array
+        if (Array.isArray(data)) {
+          setCourses(data);
+        } else {
+          console.error('Courses data is not an array:', data);
+          setCourses([]);
+        }
       } catch (err) {
         console.error('Error loading courses:', err);
+        setError(err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     loadCourses();
   }, []);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className={styles.loading}>
         <p>Cargando cursos...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.loading}>
+        <p>No fue posible cargar los cursos. Por favor, intenta de nuevo.</p>
+      </div>
+    );
+  }
+
+  if (courses.length === 0) {
+    return (
+      <div className={styles.loading}>
+        <p>No hay cursos disponibles.</p>
       </div>
     );
   }
@@ -48,25 +75,20 @@ const CoursesPage = () => {
         {courses.map((course) => (
           <div key={course.id} className={styles.courseCard}>
             <div className={styles.courseHeader}>
-              <h3 className={styles.courseName}>{course.name}</h3>
-              <span className={`${styles.courseLevel} ${styles[`level${course.level}`]}`}>
-                {course.level}
+              <h3 className={styles.courseName}>{course.titulo}</h3>
+              <span className={`${styles.courseLevel} ${styles[`level${course.nivel}`]}`}>
+                {course.nivel}
               </span>
             </div>
-            <p className={styles.coursePalo}>{course.palo}</p>
-            <p className={styles.courseDescription}>{course.description}</p>
+            <p className={styles.courseDescription}>{course.descripcion}</p>
             <div className={styles.courseMeta}>
               <span className={styles.courseMetaItem}>
                 <Clock size={14} />
-                {course.duration}
-              </span>
-              <span className={styles.courseMetaItem}>
-                <Users size={14} />
-                {course.studentCount} alumnos
+                {course.duracion}
               </span>
               <span className={styles.courseMetaItem}>
                 <BookOpen size={14} />
-                {course.lessons.length} lecciones
+                {course.lecciones?.length || 0} lecciones
               </span>
             </div>
             <Link to={`/academia/cursos/${course.id}`} className={styles.viewDetailLink}>

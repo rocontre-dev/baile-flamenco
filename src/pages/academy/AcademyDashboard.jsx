@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, GraduationCap, BookOpen, FileText, Target, ArrowRight, Eye } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { ROLES } from '../../config/roles';
 import GetAcademyDashboardData from '../../useCases/academy/GetAcademyDashboardData';
 import GetTeacherDashboardData from '../../useCases/teachers/GetTeacherDashboardData';
 import styles from './AcademyPages.module.css';
@@ -30,29 +31,34 @@ const AcademyDashboard = () => {
   const { user, hasRole } = useAuth();
   const [adminData, setAdminData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadDashboardData = async () => {
+      setError(null);
+      setIsLoading(true);
+
       try {
-        if (hasRole('teacher') && user?.id) {
+        if (hasRole(ROLES.TEACHER) && user?.id) {
           const data = await GetTeacherDashboardData.execute(user.id);
           setTeacherData(data);
-        } else if (hasRole('admin')) {
+        } else if (hasRole(ROLES.ADMIN)) {
           const data = await GetAcademyDashboardData.execute();
           setAdminData(data);
         }
       } catch (err) {
         console.error('Error loading dashboard data:', err);
+        setError(err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     loadDashboardData();
   }, [user, hasRole]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className={styles.loading}>
         <p>Cargando dashboard...</p>
@@ -60,8 +66,16 @@ const AcademyDashboard = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className={styles.loading}>
+        <p>Error al cargar el dashboard. Por favor, intenta de nuevo.</p>
+      </div>
+    );
+  }
+
   // Teacher Dashboard
-  if (hasRole('teacher') && teacherData) {
+  if (hasRole(ROLES.TEACHER) && teacherData) {
     return (
       <div className={styles.dashboardContainer}>
         <div className={styles.pageHeader}>
@@ -220,7 +234,7 @@ const AcademyDashboard = () => {
   }
 
   // Admin Dashboard (existing)
-  if (hasRole('admin') && adminData) {
+  if (hasRole(ROLES.ADMIN) && adminData) {
     return (
       <div className={styles.dashboardContainer}>
         <div className={styles.pageHeader}>

@@ -1,7 +1,6 @@
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Link } from 'react-router-dom';
-import { AlertTriangle } from 'lucide-react';
-import styles from './RoleGuard.module.css';
+import { ROLES } from '../../config/roles';
 
 /**
  * RoleGuard Component
@@ -10,34 +9,39 @@ import styles from './RoleGuard.module.css';
  * @param {Object} props
  * @param {string[]} props.allowedRoles - Array of roles that can access this route
  * @param {ReactNode} props.children - Content to render if access is granted
+ * @param {ReactNode} props.element - Alternative: element to render if access is granted (for route elements)
  */
-const RoleGuard = ({ allowedRoles = [], children }) => {
-  const { user, canAccess } = useAuth();
+const RoleGuard = ({ allowedRoles = [], children, element }) => {
+  const { currentUser, isAuthenticated } = useAuth();
 
-  // Check if user has permission
-  const hasPermission = canAccess(allowedRoles);
-
-  if (!hasPermission) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.icon}>
-          <AlertTriangle size={48} />
-        </div>
-        <h1 className={styles.title}>Acceso Restringido</h1>
-        <p className={styles.message}>
-          No tienes permisos para acceder a esta sección.
-        </p>
-        <p className={styles.hint}>
-          Rol actual: <strong>{user?.role || 'No autenticado'}</strong>
-        </p>
-        <Link to="/" className={styles.backButton}>
-          Volver
-        </Link>
-      </div>
-    );
+  // If not authenticated, redirect to home (profile selection)
+  if (!isAuthenticated || !currentUser) {
+    return <Navigate to="/" replace />;
   }
 
-  return children;
+  // Normalize roles for comparison (handle both old and new formats)
+  const normalizeRole = (role) => {
+    const roleMap = {
+      admin: ROLES.ADMIN,
+      teacher: ROLES.TEACHER,
+      student: ROLES.STUDENT,
+    };
+    return roleMap[role] || role;
+  };
+
+  // Check if user has one of the allowed roles
+  const hasAllowedRole = allowedRoles.some(allowedRole => {
+    const normalizedAllowed = normalizeRole(allowedRole);
+    const normalizedCurrent = normalizeRole(currentUser.role);
+    return normalizedAllowed === normalizedCurrent;
+  });
+
+  if (!hasAllowedRole) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Render children or element
+  return children || element;
 };
 
 export default RoleGuard;

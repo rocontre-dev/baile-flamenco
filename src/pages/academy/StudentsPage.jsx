@@ -11,23 +11,29 @@ import styles from './AcademyPages.module.css';
 const StudentsPage = () => {
   const [students, setStudents] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [levelFilter, setLevelFilter] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
+      setError(null);
+      setIsLoading(true);
+
       try {
         const [studentsData, coursesData] = await Promise.all([
           GetStudents.execute(),
           GetCourses.execute()
         ]);
-        setStudents(studentsData);
-        setCourses(coursesData);
+        // Ensure data is array
+        setStudents(Array.isArray(studentsData) ? studentsData : []);
+        setCourses(Array.isArray(coursesData) ? coursesData : []);
       } catch (err) {
         console.error('Error loading data:', err);
+        setError(err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -36,8 +42,8 @@ const StudentsPage = () => {
 
   // Filter and search students
   const filteredStudents = students.filter((student) => {
-    const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLevel = !levelFilter || student.level === levelFilter;
+    const matchesSearch = student.nombre.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesLevel = !levelFilter || student.nivel === levelFilter;
     return matchesSearch && matchesLevel;
   });
 
@@ -50,10 +56,18 @@ const StudentsPage = () => {
 
   const levels = ['Principiante', 'Intermedio', 'Avanzado'];
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className={styles.loading}>
         <p>Cargando alumnos...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.loading}>
+        <p>No fue posible cargar los alumnos. Por favor, intenta de nuevo.</p>
       </div>
     );
   }
@@ -99,7 +113,6 @@ const StudentsPage = () => {
       {filteredStudents.length > 0 ? (
         <div className={styles.studentsGrid}>
           {filteredStudents.map((student) => {
-            const studentCourses = getStudentCourses(student);
             return (
               <div key={student.id} className={styles.studentCard}>
                 <div className={styles.studentHeader}>
@@ -107,9 +120,9 @@ const StudentsPage = () => {
                     <Users size={24} />
                   </div>
                   <div className={styles.studentInfo}>
-                    <h3 className={styles.studentName}>{student.name}</h3>
-                    <span className={`${styles.studentLevel} ${styles[`level${student.level}`]}`}>
-                      {student.level}
+                    <h3 className={styles.studentName}>{student.nombre}</h3>
+                    <span className={`${styles.studentLevel} ${styles[`level${student.nivel}`]}`}>
+                      {student.nivel}
                     </span>
                   </div>
                 </div>
@@ -118,18 +131,9 @@ const StudentsPage = () => {
                   <div className={styles.studentCourses}>
                     <BookOpen size={14} />
                     <span>
-                      <strong>Cursos:</strong> {studentCourses.length} asignado(s)
+                      <strong>Activo:</strong> {student.activo ? 'Sí' : 'No'}
                     </span>
                   </div>
-                  {studentCourses.length > 0 && (
-                    <div className={styles.studentCourseList}>
-                      {studentCourses.map(course => (
-                        <span key={course.id} className={styles.courseTag}>
-                          {course.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
             );

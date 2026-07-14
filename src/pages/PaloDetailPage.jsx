@@ -29,7 +29,7 @@ const PaloDetailPage = () => {
   return (
     <div className={styles.container}>
       <Breadcrumb items={[
-        { to: '/palos', label: 'Palos' },
+        { to: '/alumno/palos', label: 'Palos' },
         { to: '', label: palo.nombre }
       ]} />
       
@@ -41,7 +41,7 @@ const PaloDetailPage = () => {
         {palo.categorias?.map(cat => (
           <Link 
             key={cat.id} 
-            to={`/palos/${paloSlug}/${cat.slug}`}
+            to={`/alumno/palos/${paloSlug}/${cat.slug}`}
             className={styles.categoryCard}
           >
             <h3 className={styles.categoryName}>{cat.nombre}</h3>

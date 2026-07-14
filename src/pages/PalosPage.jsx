@@ -12,7 +12,7 @@ const PalosPage = () => {
         Explora los diferentes palos del flamenco y comienza tu aprendizaje.
       </p>
       <div className={styles.grid}>
-        <Link to="/palos/tangos" className={styles.card}>
+        <Link to="/alumno/palos/tangos" className={styles.card}>
           <h2 className={styles.cardTitle}>Tangos</h2>
           <p className={styles.cardDescription}>
             Palo flamenco de compás binario (4/4), de aire alegre y festivo.

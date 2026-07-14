@@ -30,8 +30,8 @@ const CategoryPage = () => {
   return (
     <div className={styles.container}>
       <Breadcrumb items={[
-        { to: '/palos', label: 'Palos' },
-        { to: `/palos/${paloSlug}`, label: paloSlug },
+        { to: '/alumno/palos', label: 'Palos' },
+        { to: `/alumno/palos/${paloSlug}`, label: paloSlug },
         { to: '', label: categoriaSlug }
       ]} />
       
@@ -41,7 +41,7 @@ const CategoryPage = () => {
         {exercises.map(exercise => (
           <Link 
             key={exercise.id}
-            to={`/palos/${paloSlug}/${categoriaSlug}/${exercise.slug}`}
+            to={`/alumno/palos/${paloSlug}/${categoriaSlug}/${exercise.slug}`}
             className={styles.exerciseCard}
           >
             <h2 className={styles.exerciseTitle}>{exercise.titulo}</h2>

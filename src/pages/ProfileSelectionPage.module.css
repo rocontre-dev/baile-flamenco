@@ -1,0 +1,146 @@
+/* ===== Profile Selection Page ===== */
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-cream);
+  padding: var(--spacing-xl);
+}
+
+.content {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2xl);
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Profiles Grid */
+.profilesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  width: 100%;
+  max-width: 900px;
+}
+
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-2xl);
+  background-color: white;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.profileCard:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.profileCard:focus {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.iconWrapper {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(143, 29, 50, 0.1);
+  border-radius: 50%;
+}
+
+.icon {
+  color: var(--color-primary);
+}
+
+.profileLabel {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.profileDescription {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .profilesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .profilesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .profileCard {
+    padding: var(--spacing-xl);
+  }
+
+  .iconWrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .icon {
+    width: 36px;
+    height: 36px;
+  }
+}
