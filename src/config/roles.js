@@ -38,13 +38,13 @@ export const MOCK_USERS = {
     role: ROLES.ADMIN,
   },
   [ROLES.TEACHER]: {
-    id: 'teacher-demo',
+    id: 'prof-001',
     name: 'Profesor Demo',
     role: ROLES.TEACHER,
   },
   [ROLES.STUDENT]: {
-    id: 'student-demo',
-    name: 'Alumno Demo',
+    id: 'alum-001',
+    name: 'María García',
     role: ROLES.STUDENT,
   },
 };

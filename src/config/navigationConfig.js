@@ -110,6 +110,13 @@ export const navigationConfig = {
       icon: 'TrendingUp',
       permission: PERMISSIONS.VIEW_OWN_PROGRESS,
     },
+    {
+      path: '/alumno/perfil',
+      label: 'Mi Perfil',
+      icon: 'User',
+      permission: PERMISSIONS.VIEW_OWN_PROGRESS,
+      end: true,
+    },
   ],
 };
 

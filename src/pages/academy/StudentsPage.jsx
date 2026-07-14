@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GetStudents from '../../useCases/students/GetStudents';
-import GetCourses from '../../useCases/courses/GetCourses';
-import { Search, Users, BookOpen } from 'lucide-react';
+import { Search, Users, BookOpen, Eye } from 'lucide-react';
 import styles from './AcademyPages.module.css';
 
 /**
@@ -9,8 +9,8 @@ import styles from './AcademyPages.module.css';
  * Lists all students with search, filter, and assigned courses
  */
 const StudentsPage = () => {
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
-  const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,13 +22,9 @@ const StudentsPage = () => {
       setIsLoading(true);
 
       try {
-        const [studentsData, coursesData] = await Promise.all([
-          GetStudents.execute(),
-          GetCourses.execute()
-        ]);
+        const studentsData = await GetStudents.execute();
         // Ensure data is array
         setStudents(Array.isArray(studentsData) ? studentsData : []);
-        setCourses(Array.isArray(coursesData) ? coursesData : []);
       } catch (err) {
         console.error('Error loading data:', err);
         setError(err);
@@ -46,13 +42,6 @@ const StudentsPage = () => {
     const matchesLevel = !levelFilter || student.nivel === levelFilter;
     return matchesSearch && matchesLevel;
   });
-
-  // Get course names for a student
-  const getStudentCourses = (student) => {
-    return courses.filter(course => 
-      student.assignedCourseIds.includes(course.id)
-    );
-  };
 
   const levels = ['Principiante', 'Intermedio', 'Avanzado'];
 
@@ -135,6 +124,14 @@ const StudentsPage = () => {
                     </span>
                   </div>
                 </div>
+                <button
+                  className={styles.viewProfileButton}
+                  onClick={() => navigate(`/administrador/alumnos/${student.id}`)}
+                  aria-label={`Ver perfil de ${student.nombre}`}
+                >
+                  <Eye size={16} />
+                  Ver perfil
+                </button>
               </div>
             );
           })}

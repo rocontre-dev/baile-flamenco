@@ -1,0 +1,134 @@
+[
+  {
+    "studentId": "alum-001",
+    "coursesEnrolled": ["a1b2c3d4-e5f6-7890-abcd-ef1234567890"],
+    "completedLessons": 6,
+    "totalLessons": 18,
+    "totalPracticeMinutes": 872,
+    "lastPracticeAt": "2026-07-12T18:30:00Z",
+    "goals": [
+      {
+        "id": "goal-001",
+        "title": "Mantener el compás de Tangos",
+        "description": "Practicar el compás básico de Tangos durante 15 minutos diarios",
+        "status": "En progreso",
+        "dueDate": "2026-08-15",
+        "courseId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      },
+      {
+        "id": "goal-002",
+        "title": "Mejorar el marcaje básico",
+        "description": "Refinar la técnica de marcaje en el primer tercio",
+        "status": "Pendiente",
+        "dueDate": "2026-09-01",
+        "courseId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      }
+    ],
+    "teacherNotes": [
+      {
+        "id": "note-001",
+        "text": "Trabajar el cierre del compás y evitar adelantar el remate.",
+        "teacherId": "prof-001",
+        "teacherName": "Rodrigo Robles",
+        "createdAt": "2026-07-10T10:00:00Z",
+        "courseId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      }
+    ],
+    "recentActivity": [
+      {
+        "id": "activity-001",
+        "type": "practice",
+        "lessonTitle": "Remate básico de Tangos",
+        "courseTitle": "Iniciación al Flamenco",
+        "duration": 25,
+        "practicedAt": "2026-07-12T18:30:00Z"
+      },
+      {
+        "id": "activity-002",
+        "type": "lesson_completed",
+        "lessonTitle": "Marcaje en el primer tercio",
+        "courseTitle": "Iniciación al Flamenco",
+        "duration": null,
+        "completedAt": "2026-07-10T16:00:00Z"
+      }
+    ],
+    "bookmarks": [
+      {
+        "id": "bookmark-001",
+        "name": "Inicio del compás",
+        "lessonTitle": "Remate básico de Tangos",
+        "courseTitle": "Iniciación al Flamenco",
+        "timeSeconds": 45,
+        "createdAt": "2026-07-12T18:35:00Z"
+      },
+      {
+        "id": "bookmark-002",
+        "name": "Cierre del remate",
+        "lessonTitle": "Remate básico de Tangos",
+        "courseTitle": "Iniciación al Flamenco",
+        "timeSeconds": 120,
+        "createdAt": "2026-07-10T16:10:00Z"
+      }
+    ]
+  },
+  {
+    "studentId": "alum-002",
+    "coursesEnrolled": ["a1b2c3d4-e5f6-7890-abcd-ef1234567890"],
+    "completedLessons": 12,
+    "totalLessons": 18,
+    "totalPracticeMinutes": 1450,
+    "lastPracticeAt": "2026-07-13T20:00:00Z",
+    "goals": [
+      {
+        "id": "goal-003",
+        "title": "Practicar el primer remate",
+        "description": "Dominar el remate del primer tercio con precisión",
+        "status": "Completado",
+        "dueDate": "2026-07-01",
+        "courseId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      }
+    ],
+    "teacherNotes": [
+      {
+        "id": "note-002",
+        "text": "Excelente progreso. Listo para avanzar al segundo tercio.",
+        "teacherId": "prof-001",
+        "teacherName": "Rodrigo Robles",
+        "createdAt": "2026-07-08T11:00:00Z",
+        "courseId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      }
+    ],
+    "recentActivity": [
+      {
+        "id": "activity-003",
+        "type": "practice",
+        "lessonTitle": "Llamada de Tangos",
+        "courseTitle": "Iniciación al Flamenco",
+        "duration": 30,
+        "practicedAt": "2026-07-13T20:00:00Z"
+      }
+    ],
+    "bookmarks": [
+      {
+        "id": "bookmark-003",
+        "name": "Entrada de la llamada",
+        "lessonTitle": "Llamada de Tangos",
+        "courseTitle": "Iniciación al Flamenco",
+        "timeSeconds": 30,
+        "createdAt": "2026-07-13T20:05:00Z"
+      }
+    ]
+  },
+  {
+    "studentId": "alum-003",
+    "coursesEnrolled": [],
+    "completedLessons": 0,
+    "totalLessons": 0,
+    "totalPracticeMinutes": 0,
+    "lastPracticeAt": null,
+    "goals": [],
+    "teacherNotes": [],
+    "recentActivity": [],
+    "bookmarks": []
+  }
+]

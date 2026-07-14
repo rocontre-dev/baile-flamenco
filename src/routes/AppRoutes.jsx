@@ -59,6 +59,7 @@ const AppRoutes = () => {
         {/* Direct admin routes (no AcademyLayout sidebar) */}
         <Route path="profesores" element={<TeachersPage />} />
         <Route path="alumnos" element={<StudentsPage />} />
+        <Route path="alumnos/:studentId" element={<StudentProfilePage />} />
         <Route path="cursos" element={<CoursesPage />} />
         <Route path="cursos/:courseId" element={<CourseDetailPage />} />
         <Route path="configuracion" element={<AdminSettingsPage />} />
@@ -73,6 +74,7 @@ const AppRoutes = () => {
         <Route index element={<TeacherDashboardPage />} />
         <Route path="cursos" element={<TeacherCoursesPage />} />
         <Route path="alumnos" element={<TeacherStudentsPage />} />
+        <Route path="alumnos/:studentId" element={<StudentProfilePage />} />
         <Route path="planes-practica" element={<TeacherContentPage />} />
         <Route path="contenido" element={<TeacherContentPage />} />
       </Route>
@@ -95,6 +97,7 @@ const AppRoutes = () => {
         <Route path="practica" element={<LessonPage />} />
         <Route path="cuenta" element={<CuentaPage />} />
         <Route path="mi-perfil" element={<MyProfilePage />} />
+        <Route path="perfil" element={<StudentProfilePage />} />
       </Route>
       
       {/* Legacy Routes - Redirect to student area */}
@@ -137,9 +140,9 @@ const AppRoutes = () => {
         <Route index element={<MyStudentsPage />} />
       </Route>
       
-      {/* Student Profile - accessible only by teacher (not admin) */}
+      {/* Student Profile - accessible by admin and teacher */}
       <Route path="/academia/alumnos/:studentId" element={
-        <RoleGuard allowedRoles={['teacher', ROLES.TEACHER]}>
+        <RoleGuard allowedRoles={['teacher', ROLES.TEACHER, 'admin', ROLES.ADMIN]}>
           <AcademyLayout />
         </RoleGuard>
       }>

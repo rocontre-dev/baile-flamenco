@@ -1,52 +1,150 @@
-import { Link } from 'react-router-dom';
-import { Users, ArrowRight } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { Users, Eye, Search } from 'lucide-react';
+import GetStudents from '../../useCases/students/GetStudents';
+import GetCourses from '../../useCases/courses/GetCourses';
 import styles from './TeacherStudentsPage.module.css';
 
 /**
- * Página de lista de alumnos - Placeholder funcional
- * En fases futuras se implementará la lista completa y detalle
+ * Teacher Students Page
+ * Lists only students enrolled in courses taught by the authenticated teacher
  */
 const TeacherStudentsPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [allMyStudents, setAllMyStudents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+
+      try {
+        // Get teacher's ID
+        const teacherId = user?.id;
+
+        if (!teacherId) {
+          console.error('No teacher ID available');
+          setIsLoading(false);
+          return;
+        }
+
+        // Get all courses and filter by teacher
+        const allCourses = await GetCourses.execute();
+        const teacherCourses = allCourses.filter(course => course.profesorId === teacherId);
+
+        // Get all students
+        const allStudents = await GetStudents.execute();
+
+        // Get student profiles to check course enrollment
+        const response = await fetch('/data/studentProfiles.json');
+        const allProfiles = await response.json();
+
+        // Filter students enrolled in teacher's courses
+        const teacherCourseIds = teacherCourses.map(course => course.id);
+        const enrolledStudents = allStudents.filter(student => {
+          const profile = allProfiles.find(p => p.studentId === student.id);
+          if (!profile || !profile.coursesEnrolled) return false;
+          return profile.coursesEnrolled.some(courseId => teacherCourseIds.includes(courseId));
+        });
+
+        setAllMyStudents(enrolledStudents);
+
+      } catch (error) {
+        console.error('Error loading teacher students:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [user]);
+
+  // Filter by search query using memo
+  const filteredStudents = useMemo(() => {
+    if (searchQuery.trim()) {
+      return allMyStudents.filter(student =>
+        student.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    return allMyStudents;
+  }, [allMyStudents, searchQuery]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <p className={styles.loading}>Cargando alumnos...</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <Users size={32} className={styles.headerIcon} />
           <div>
-            <h1>Alumnos</h1>
-            <p className={styles.subtitle}>Gestiona los estudiantes de la academia</p>
+            <h1>Mis Alumnos</h1>
+            <p className={styles.subtitle}>
+              Estudiantes inscritos en tus cursos ({filteredStudents.length})
+            </p>
           </div>
         </div>
       </header>
 
-      <section className={styles.placeholder}>
-        <div className={styles.placeholderContent}>
-          <Users size={64} className={styles.placeholderIcon} />
-          <h2>Lista de Alumnos</h2>
-          <p>
-            Esta funcionalidad estará disponible próximamente.
-            Podrás ver la lista completa de alumnos, sus progresos,
-            cursos inscritos y notas de práctica.
-          </p>
-          <div className={styles.placeholderActions}>
-            <Link to="/profesor" className={styles.backLink}>
-              <ArrowRight size={18} />
-              Volver al Dashboard
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Search */}
+      <div className={styles.searchContainer}>
+        <Search size={18} className={styles.searchIcon} />
+        <input
+          type="text"
+          placeholder="Buscar por nombre..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+      </div>
 
-      <section className={styles.infoSection}>
-        <h3>Próximamente:</h3>
-        <ul className={styles.featuresList}>
-          <li>Lista completa de alumnos con filtros y búsqueda</li>
-          <li>Detalle de alumno con progreso individual</li>
-          <li>Notas de práctica y marcadores personales</li>
-          <li>Historial de ejercicios completados</li>
-          <li>Asignación de cursos y lecciones</li>
-        </ul>
-      </section>
+      {/* Students List */}
+      {filteredStudents.length > 0 ? (
+        <div className={styles.studentsGrid}>
+          {filteredStudents.map((student) => (
+            <div key={student.id} className={styles.studentCard}>
+              <div className={styles.studentHeader}>
+                <div className={styles.studentAvatar}>
+                  <Users size={24} />
+                </div>
+                <div className={styles.studentInfo}>
+                  <h3 className={styles.studentName}>{student.nombre}</h3>
+                  <span className={`${styles.studentLevel} ${styles[`level${student.nivel}`]}`}>
+                    {student.nivel}
+                  </span>
+                </div>
+              </div>
+              <div className={styles.studentDetails}>
+                <p className={styles.studentEmail}>{student.email}</p>
+                <div className={styles.studentStatus}>
+                  <strong>Activo:</strong> {student.activo ? 'Sí' : 'No'}
+                </div>
+              </div>
+              <button
+                className={styles.viewProfileButton}
+                onClick={() => navigate(`/profesor/alumnos/${student.id}`)}
+                aria-label={`Ver perfil de ${student.nombre}`}
+              >
+                <Eye size={16} />
+                Ver perfil
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className={styles.emptyState}>
+          <Users size={48} className={styles.emptyIcon} />
+          <p>No se encontraron alumnos en tus cursos.</p>
+        </div>
+      )}
     </div>
   );
 };
