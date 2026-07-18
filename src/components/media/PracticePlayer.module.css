@@ -16,6 +16,11 @@
   border-radius: 0;
 }
 
+/* Cursor oculto en desktop cuando los controles están ocultos */
+.container.cursorHidden {
+  cursor: none;
+}
+
 /* ===== Video Wrapper ===== */
 .videoWrapper {
   position: relative;
@@ -51,6 +56,104 @@
   z-index: 10;
 }
 
+/* ===== Center Play Button Overlay ===== */
+/* El overlay cubre todo el video pero solo el botón es interactivo */
+.centerPlayButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.15);
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 15;
+  transition: opacity 200ms ease;
+  padding: 0;
+}
+
+.centerPlayButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.centerPlayButton > svg {
+  position: relative;
+  z-index: 16;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  min-height: 64px;
+  padding: 16px;
+  background-color: rgba(143, 29, 50, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: all 200ms ease;
+}
+
+.centerPlayButton:hover > svg {
+  background-color: rgba(143, 29, 50, 1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(143, 29, 50, 0.4);
+}
+
+.centerPlayButton:active > svg {
+  transform: scale(0.95);
+}
+
+.centerPlayButton:focus-visible {
+  outline: none;
+}
+
+.centerPlayButton:focus-visible > svg {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* ===== Responsive para botón centrado ===== */
+@media (max-width: 768px) {
+  .centerPlayButton > svg {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .centerPlayButton > svg {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px;
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .centerPlayButton,
+  .centerPlayButton > svg,
+  .controls {
+    transition: none;
+  }
+}
+
 /* ===== Controls ===== */
 .controls {
   position: absolute;
@@ -84,6 +187,9 @@
   align-items: center;
   cursor: pointer;
   margin-bottom: var(--spacing-md);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 }
 
 .progressBar {
@@ -150,14 +256,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: var(--spacing-xs);
   background: transparent;
   border: none;
   border-radius: var(--border-radius-md);
   color: white;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 200ms ease;
 }
 
 .controlButton:hover {
@@ -225,8 +332,8 @@
   }
 
   .controlButton {
-    width: 40px;
-    height: 40px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   .controlButton svg {
@@ -254,8 +361,8 @@
   }
 
   .controlButton {
-    width: 36px;
-    height: 36px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   .timeDisplay {
@@ -593,16 +700,18 @@
   }
 
   .playbackRateButton {
-    min-width: 44px;
-    height: 30px;
+    min-width: 48px;
+    min-height: 48px;
+    height: auto;
     font-size: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .playbackRateButton {
-    min-width: 40px;
-    height: 28px;
+    min-width: 48px;
+    min-height: 48px;
+    height: auto;
     font-size: 0.6875rem;
     padding: 0 var(--spacing-xs);
   }

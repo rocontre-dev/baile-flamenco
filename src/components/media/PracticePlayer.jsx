@@ -2,8 +2,11 @@ import { useState, useRef, useEffect, useCallback, useMemo, forwardRef, useImper
 import { Play, Pause, RotateCcw, Maximize, Minimize, Repeat2, Flag, X } from 'lucide-react';
 import styles from './PracticePlayer.module.css';
 
+// ===== CONSTANTES GLOBALES =====
+const CONTROLS_HIDE_DELAY_MS = 1000; // 1 segundo
+
 /**
- * PracticePlayer - Reproductor de video profesional para Tibiritábara
+ * PracticePlayer - Reproductor de vidbeen resolvedeo profesional para Tibiritábara
  * 
  * Componente desacoplado del dominio, enfocado únicamente en reproducción de video.
  * Diseñado para crecer con futuras funcionalidades (velocidad, loop, sincronización, etc.)
@@ -29,6 +32,58 @@ const PracticePlayer = forwardRef(({
   markers = [],
   className = ''
 }, ref) => {
+  // Referencias
+  const videoRef = useRef(null);
+  const containerRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  const controlsHideTimerRef = useRef(null);
+  const progressRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const activePointerIdRef = useRef(null);
+  const isInteractingRef = useRef(false);
+
+  // Estados
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [isLooping, setIsLooping] = useState(false);
+  const [abLoopEnabled, setAbLoopEnabled] = useState(false);
+  const [pointA, setPointA] = useState(null);
+  const [pointB, setPointB] = useState(null);
+  const [showCursor, setShowCursor] = useState(true);
+
+  // ===== SISTEMA DE CONTROLES INTELIGENTE =====
+  // Estas funciones deben definirse PRIMERAMENTE porque son usadas por otros callbacks
+  const clearControlsHideTimer = useCallback(() => {
+    if (controlsHideTimerRef.current) {
+      window.clearTimeout(controlsHideTimerRef.current);
+      controlsHideTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleControlsHide = useCallback(() => {
+    clearControlsHideTimer();
+    
+    controlsHideTimerRef.current = window.setTimeout(() => {
+      const video = videoRef.current;
+      if (
+        !isInteractingRef.current &&
+        video &&
+        !video.paused &&
+        !video.ended
+      ) {
+        setShowControls(false);
+        setShowCursor(false);
+      }
+      controlsHideTimerRef.current = null;
+    }, CONTROLS_HIDE_DELAY_MS);
+  }, [clearControlsHideTimer]);
+
   // Expose imperative methods to parent component
   useImperativeHandle(ref, () => ({
     seekTo(time) {
@@ -40,26 +95,6 @@ const PracticePlayer = forwardRef(({
       return videoRef.current?.currentTime || 0;
     }
   }));
-  // Referencias
-  const videoRef = useRef(null);
-  const containerRef = useRef(null);
-  const animationFrameRef = useRef(null);
-  const controlsTimeoutRef = useRef(null);
-
-  // Estados
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showControls, setShowControls] = useState(true);
-  const [isHovering, setIsHovering] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [playbackRate, setPlaybackRate] = useState(1);
-  const [isLooping, setIsLooping] = useState(false);
-  const [abLoopEnabled, setAbLoopEnabled] = useState(false);
-  const [pointA, setPointA] = useState(null);
-  const [pointB, setPointB] = useState(null);
 
   // Velocidades disponibles
   const playbackRates = [0.5, 0.75, 1, 1.25, 1.5];
@@ -203,8 +238,89 @@ const PracticePlayer = forwardRef(({
     setCurrentTime(0);
   }, []);
 
-  // Manejar click en barra de progreso
+  // Actualizar progreso desde evento pointer
+  const updateProgressFromPointer = useCallback((e) => {
+    if (!progressRef.current || !videoRef.current || !duration) return;
+    
+    const rect = progressRef.current.getBoundingClientRect();
+    const clientX = e.clientX;
+    if (clientX === undefined) return;
+    
+    const clickX = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+    const newTime = percentage * duration;
+    
+    videoRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  }, [duration]);
+
+  // Manejar inicio de arrastre en scrubber
+  const handleProgressPointerDown = useCallback((e) => {
+    if (!progressRef.current || !videoRef.current || !duration) {
+      return;
+    }
+
+    e.preventDefault();
+
+    isDraggingRef.current = true;
+    activePointerIdRef.current = e.pointerId;
+    isInteractingRef.current = true;
+
+    progressRef.current.setPointerCapture?.(e.pointerId);
+
+    setShowControls(true);
+    setShowCursor(true);
+    clearControlsHideTimer();
+    updateProgressFromPointer(e);
+  }, [duration, clearControlsHideTimer, updateProgressFromPointer]);
+
+  // Manejar movimiento durante arrastre en scrubber
+  const handleProgressPointerMove = useCallback((e) => {
+    if (
+      !isDraggingRef.current ||
+      activePointerIdRef.current !== e.pointerId
+    ) {
+      return;
+    }
+
+    e.preventDefault();
+    updateProgressFromPointer(e);
+  }, [updateProgressFromPointer]);
+
+  // Finalizar interacción con scrubber
+  const finishProgressInteraction = useCallback((e) => {
+    if (
+      !isDraggingRef.current ||
+      activePointerIdRef.current !== e.pointerId
+    ) {
+      return;
+    }
+
+    const progressElement = progressRef.current;
+
+    if (progressElement?.hasPointerCapture?.(e.pointerId)) {
+      progressElement.releasePointerCapture(e.pointerId);
+    }
+
+    isDraggingRef.current = false;
+    activePointerIdRef.current = null;
+    isInteractingRef.current = false;
+
+    const video = videoRef.current;
+
+    if (video && !video.paused && !video.ended) {
+      scheduleControlsHide();
+    } else {
+      clearControlsHideTimer();
+      setShowControls(true);
+    }
+  }, [scheduleControlsHide, clearControlsHideTimer]);
+
+  // Manejar click en barra de progreso (fallback para click simple)
   const handleProgressClick = useCallback((e) => {
+    // Si está arrastrando, ignorar click (ya se manejó con pointer events)
+    if (isDraggingRef.current) return;
+    
     if (!videoRef.current || !duration) return;
     
     const rect = e.currentTarget.getBoundingClientRect();
@@ -215,7 +331,17 @@ const PracticePlayer = forwardRef(({
     
     videoRef.current.currentTime = newTime;
     setCurrentTime(newTime);
-  }, [duration]);
+    
+    // Mantener controles visibles después de la interacción
+    setShowControls(true);
+    setShowCursor(true);
+    clearControlsHideTimer();
+    
+    const video = videoRef.current;
+    if (video && !video.paused && !video.ended) {
+      scheduleControlsHide();
+    }
+  }, [duration, clearControlsHideTimer, scheduleControlsHide]);
 
   // Toggle fullscreen
   const toggleFullscreen = useCallback(async () => {
@@ -287,7 +413,15 @@ const PracticePlayer = forwardRef(({
       setVideoLoaded(true);
     };
 
-    const handleEnded = () => {
+    const handlePlay = () => {
+      setIsPlaying(true);
+    };
+
+    const handlePause = () => {
+      setIsPlaying(false);
+    };
+
+    const handleVideoEnded = () => {
       // A-B Loop tiene prioridad absoluta
       if (abLoopEnabled && pointA !== null && pointB !== null) {
         videoRef.current.currentTime = pointA;
@@ -309,13 +443,17 @@ const PracticePlayer = forwardRef(({
     };
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    video.addEventListener('ended', handleEnded);
+    video.addEventListener('play', handlePlay);
+    video.addEventListener('pause', handlePause);
+    video.addEventListener('ended', handleVideoEnded);
     document.addEventListener('fullscreenchange', handleFullscreenChange);
 
     // Cleanup
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('pause', handlePause);
+      video.removeEventListener('ended', handleVideoEnded);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -337,38 +475,45 @@ const PracticePlayer = forwardRef(({
     };
   }, [isPlaying, updateTime]);
 
-  // Manejar hover para mostrar controles
-  const handleMouseEnter = useCallback(() => {
-    setIsHovering(true);
-    setShowControls(true);
-    if (controlsTimeoutRef.current) {
-      clearTimeout(controlsTimeoutRef.current);
+  // Manejar pointer down (touch/pen) - mostrar controles sin hacer play/pause
+  const handlePointerDown = useCallback((event) => {
+    // Solo para touch/pen, no para mouse
+    if (event.pointerType === 'mouse') {
+      return;
     }
-  }, []);
 
-  const handleMouseLeave = useCallback(() => {
-    setIsHovering(false);
-    if (isPlaying) {
-      controlsTimeoutRef.current = setTimeout(() => {
-        setShowControls(false);
-      }, 2000);
-    }
-  }, [isPlaying]);
-
-  // Manejar movimiento del mouse (reaparecer controles)
-  const handleMouseMove = useCallback(() => {
     setShowControls(true);
-    if (controlsTimeoutRef.current) {
-      clearTimeout(controlsTimeoutRef.current);
-    }
+    clearControlsHideTimer();
+
     if (isPlaying) {
-      controlsTimeoutRef.current = setTimeout(() => {
-        if (!isHovering) {
-          setShowControls(false);
-        }
-      }, 2000);
+      scheduleControlsHide();
     }
-  }, [isPlaying, isHovering]);
+  }, [isPlaying, clearControlsHideTimer, scheduleControlsHide]);
+
+  // Manejar pointer enter (mouse) - mostrar controles
+  const handlePointerEnter = useCallback(() => {
+    setShowControls(true);
+    if (isPlaying) {
+      clearControlsHideTimer();
+    }
+  }, [isPlaying, clearControlsHideTimer]);
+
+  // Manejar pointer leave (mouse) - permitir ocultamiento
+  const handlePointerLeave = useCallback(() => {
+    if (isPlaying) {
+      scheduleControlsHide();
+    }
+  }, [isPlaying, scheduleControlsHide]);
+
+  // Manejar pointer move (solo mouse) - mostrar controles y reiniciar temporizador
+  const handlePointerMove = useCallback((event) => {
+    if (event.pointerType === 'mouse') {
+      setShowControls(true);
+      if (isPlaying) {
+        scheduleControlsHide();
+      }
+    }
+  }, [isPlaying, scheduleControlsHide]);
 
   // Manejar error de video
   const handleError = useCallback(() => {
@@ -376,13 +521,21 @@ const PracticePlayer = forwardRef(({
     setVideoLoaded(true);
   }, []);
 
+  // Limpiar temporizador al desmontar
+  useEffect(() => {
+    return () => {
+      clearControlsHideTimer();
+    };
+  }, [clearControlsHideTimer]);
+
   return (
     <div 
       ref={containerRef}
-      className={`${styles.container} ${className || ''} ${isFullscreen ? styles.fullscreen : ''}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onMouseMove={handleMouseMove}
+      className={`${styles.container} ${className || ''} ${isFullscreen ? styles.fullscreen : ''} ${!showCursor ? styles.cursorHidden : ''}`}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+      onPointerMove={handlePointerMove}
+      onPointerDown={handlePointerDown}
     >
       {/* Contenedor de video */}
       <div className={styles.videoWrapper}>
@@ -406,14 +559,32 @@ const PracticePlayer = forwardRef(({
           </div>
         )}
 
+        {/* Botón Play centrado grande - visible cuando no se reproduce */}
+        {!isPlaying && videoLoaded && !hasError && (
+          <button
+            className={styles.centerPlayButton}
+            onClick={togglePlay}
+            aria-label="Reproducir video"
+            title="Reproducir video"
+            type="button"
+          >
+            <Play size={48} fill="currentColor" />
+          </button>
+        )}
+
           {/* Controles */}
         <div 
           className={`${styles.controls} ${showControls || !isPlaying ? styles.controlsVisible : ''}`}
         >
           {/* Barra de progreso */}
           <div 
+            ref={progressRef}
             className={styles.progressContainer}
             onClick={handleProgressClick}
+            onPointerDown={handleProgressPointerDown}
+            onPointerMove={handleProgressPointerMove}
+            onPointerUp={finishProgressInteraction}
+            onPointerCancel={finishProgressInteraction}
             role="slider"
             aria-label="Barra de progreso del video"
             aria-valuenow={progressPercent}
